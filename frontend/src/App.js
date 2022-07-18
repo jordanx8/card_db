@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   DataTable,
   Table,
@@ -12,10 +11,7 @@ import {
   TableCell,
   TableToolbar,
   TableToolbarSearch,
-  Button,
   TableToolbarContent,
-  TableSelectAll,
-  TableToolbarAction
 } from '@carbon/react';
 import './App.scss';
 
@@ -34,18 +30,18 @@ function App() {
 
   const rows1 = [
     {
-      id: 'a',
+      id: '1',
       season: "2019-20 ( Oklahoma City Thunder )",
     },
     {
-      id: 'b',
+      id: '2',
       season: "2020-21 ( New Orleans Pelicans )",
     }
   ]
 
   const rows2 = [
     {
-      id: 'a',
+      id: '1',
       firstname: "Steven",
       lastname: "Adams",
       seasonsplayed: "( 2020-21 )",
@@ -72,7 +68,7 @@ function App() {
   ]
   const rows3 = [
     {
-      id: 'a',
+      id: '1',
       season: "2019-20 ( Oklahoma City Thunder )",
       manufacturer: "Panini",
       set: "NBA Hoops Premium Stock",
@@ -82,7 +78,7 @@ function App() {
       notes: null
     },
     {
-      id: 'b',
+      id: '2',
       season: "2020-21 ( New Orleans Pelicans )",
       manufacturer: "Panini",
       set: "Prizm",

@@ -1,6 +1,12 @@
-module github.com/jordanx8/google_sheets
+module github.com/jordanx8/google_sheets/google_sheets_scraper
 
 go 1.18
+
+require (
+	go.mongodb.org/mongo-driver v1.9.1
+	golang.org/x/oauth2 v0.0.0-20220630143837-2104d58473e0
+	google.golang.org/api v0.87.0
+)
 
 require (
 	cloud.google.com/go/compute v1.7.0 // indirect
@@ -17,17 +23,14 @@ require (
 	github.com/xdg-go/scram v1.0.2 // indirect
 	github.com/xdg-go/stringprep v1.0.2 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
-	go.mongodb.org/mongo-driver v1.9.1 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/crypto v0.0.0-20201216223049-8b5274cf687f // indirect
 	golang.org/x/net v0.0.0-20220708220712-1185a9018129 // indirect
-	golang.org/x/oauth2 v0.0.0-20220630143837-2104d58473e0 // indirect
 	golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f // indirect
-	golang.org/x/sys v0.0.0-20220712014510-0a85c31ab51e // indirect
+	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/api v0.87.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220713161829-9c7dac0a6568 // indirect
+	google.golang.org/genproto v0.0.0-20220715211116-798f69b842b9 // indirect
 	google.golang.org/grpc v1.48.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 )
