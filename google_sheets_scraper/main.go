@@ -33,10 +33,10 @@ func main() {
 	spreadsheetId := "10-eMLMp7EGFdQd9rZW1Bb5TzB7AN00uDvg__40_M05c"
 	readRange := "Pelicans!A2:E"
 	resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
-	cards := scrapeCards(resp)
+	cards := scrapeCards(resp, "Pelicans")
 	readRange = "LSU!A2:E"
 	resp, err = srv.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
-	cards2 := scrapeCards(resp)
+	cards2 := scrapeCards(resp, "LSU")
 
 	seedToMongo(cards, "Pelicans")
 	seedToMongo(cards2, "LSU")

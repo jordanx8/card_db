@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"strconv"
 	"strings"
 
@@ -9,17 +11,19 @@ import (
 )
 
 type Card struct {
-	PlayerName   string   `json:"Player Name"`
-	Season       string   `json:"Season"`
-	Manufacturer string   `json:"Manufacturer"`
-	Set          string   `json:"Set"`
-	Insert       string   `json:"Insert"`
-	Parallel     string   `json:"Parallel"`
-	CardNumber   string   `json:"Card Number"`
-	Notes        []string `json:"Notes"`
+	FirstName     string   `json:"FirstName"`
+	LastName      string   `json:"LastName"`
+	SeasonsPlayed string   `json:"SeasonsPlayed"`
+	Season        string   `json:"Season"`
+	Manufacturer  string   `json:"Manufacturer"`
+	Set           string   `json:"Set"`
+	Insert        string   `json:"Insert"`
+	Parallel      string   `json:"Parallel"`
+	CardNumber    string   `json:"CardNumber"`
+	Notes         []string `json:"Notes"`
 }
 
-func scrapeCards(resp *sheets.ValueRange) []Card {
+func scrapeCards(resp *sheets.ValueRange, sheetName string) []Card {
 	var c Card
 	var cards []Card
 	var ready = false
@@ -32,7 +36,10 @@ func scrapeCards(resp *sheets.ValueRange) []Card {
 				if err != nil {
 					//name
 					// fmt.Printf("Player: %s\n", row)
-					c.PlayerName = row[0].(string)
+					split := strings.Fields(row[0].(string))
+					c.FirstName = split[0]
+					c.LastName = split[1]
+					c.SeasonsPlayed = split[2]
 				} else {
 					//year
 					// fmt.Printf("Season: %s\n", row)
@@ -73,8 +80,8 @@ func scrapeCards(resp *sheets.ValueRange) []Card {
 				ready = false
 			}
 		}
-		// file, _ := json.MarshalIndent(cards, "", " ")
-		// _ = ioutil.WriteFile("cards.json", file, 0644)
+		file, _ := json.MarshalIndent(cards, "", " ")
+		_ = ioutil.WriteFile(sheetName+".json", file, 0644)
 		fmt.Println(len(cards), "cards were scraped.")
 	}
 	return cards

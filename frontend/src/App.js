@@ -14,109 +14,108 @@ import {
   TableToolbarContent,
 } from '@carbon/react';
 import './App.scss';
+import { playerHeaders, seasonHeaders, cardHeaders } from './Headers.js';
 
 function App() {
-  const images =
-  {
-    Steven_Adams: "https://www.basketball-reference.com/req/202106291/images/players/adamsst01.jpg"
+  let playerNames = []
+  let playerSeasons = []
+  const json = require('./Pelicans.json');
+
+  const playerrows = json.map(getPlayers).filter(checkNil)
+
+  function getPlayers(card) {
+    let i = 0;
+    while(i < playerNames.length) {
+      if(playerNames[i] === (card.FirstName+" "+card.LastName))
+      {
+        return
+      }
+      i++
+    }
+    playerNames.push(card.FirstName+" "+card.LastName)
+    return {
+      id: card.FirstName+" "+card.LastName,
+      firstname: card.FirstName,
+      lastname: card.LastName,
+      seasonsplayed: card.SeasonsPlayed,
+      numcards: 0
+    }
   }
 
-  const headers1 = [
-    {
-      key: 'season',
-      header: 'Season'
-    },
-  ]
+  function checkNil(card) {
+    return (card !== undefined);
+  }
 
-  const rows1 = [
-    {
-      id: '1',
-      season: "2019-20 ( Oklahoma City Thunder )",
-    },
-    {
-      id: '2',
-      season: "2020-21 ( New Orleans Pelicans )",
-    }
-  ]
+  const images = Object.assign({}, ...playerrows.map(getImage))
 
-  const rows2 = [
-    {
-      id: '1',
-      firstname: "Steven",
-      lastname: "Adams",
-      seasonsplayed: "( 2020-21 )",
-      numcards: "4"
+  function getImage(x){
+    let num = "01"
+    const twonames = ["Trey_Murphy", "Larry_Nance","Cameron_Thomas"]
+    for(let i = 0; i < twonames.length; i++){
+      if(x.firstname+"_"+x.lastname.replace("-", "_") === twonames[i]){
+        num = "02"
+      }
     }
-  ]
-  const headers2 = [
-    {
-      key: 'firstname',
-      header: "First"
-    },
-    {
-      key: 'lastname',
-      header: "Last"
-    },
-    {
-      key: 'seasonsplayed',
-      header: "Season"
-    },
-    {
-      key: 'numcards',
-      header: "Number of Cards"
-    }
-  ]
-  const rows3 = [
-    {
-      id: '1',
-      season: "2019-20 ( Oklahoma City Thunder )",
-      manufacturer: "Panini",
-      set: "NBA Hoops Premium Stock",
-      insert: "",
-      parallel: "Box Set Pulsar Prizm",
-      number: "130",
-      notes: null
-    },
-    {
-      id: '2',
-      season: "2020-21 ( New Orleans Pelicans )",
-      manufacturer: "Panini",
-      set: "Prizm",
-      insert: "",
-      parallel: "Box Set Pulsar Prizm",
-      number: "110",
-      notes: null
-    },
-  ];
-  const headers3 = [
-    {
-      key: 'manufacturer',
-      header: 'Manufacturer',
-    },
-    {
-      key: 'set',
-      header: 'Set',
-    },
-    {
-      key: 'insert',
-      header: 'Insert',
-    },
-    {
-      key: 'parallel',
-      header: 'Parallel',
-    },
-    {
-      key: 'number',
-      header: 'Card Number',
-    },
-    {
-      key: 'notes',
-      header: 'Notes',
-    },
-  ];
+    return {[x.firstname+"_"+x.lastname.replace("-", "_")]: "https://www.basketball-reference.com/req/202106291/images/players/"+x.lastname.toLowerCase().slice(0,5)+x.firstname.toLowerCase().slice(0,2)+num+".jpg"}
+  }
 
+  const seasonobjects = json.map(getSeasons).filter(checkNil)
+
+  function getSeasons(card){
+    let i = 0;
+    while(i < playerSeasons.length) {
+      if(playerSeasons[i] === (card.FirstName+"_"+card.LastName.replace("-", "_")+"."+card.Season))
+      {
+        return
+      }
+      i++
+    }
+    playerSeasons.push(card.FirstName+"_"+card.LastName.replace("-", "_")+"."+card.Season)
+      return {
+        id: card.FirstName+"_"+card.LastName.replace("-", "_")+"."+card.Season,
+        season: card.FirstName+"_"+card.LastName.replace("-", "_")+"."+card.Season
+      }
+  }
+
+  const seasonrows = Object.assign({}, ...playerrows.map(createSeasonRows))
+
+  function createSeasonRows(playerrow){
+    let temparr = []
+    let i = 0
+    while(i < playerSeasons.length)
+    {
+      if(playerrow.firstname+"_"+playerrow.lastname.replace("-", "_") === playerSeasons[i].split(".")[0]){
+        temparr.push(seasonobjects[i])
+      }
+      i++
+    }
+    return {[playerrow.firstname+"_"+playerrow.lastname.replace("-", "_")]: temparr}
+  }
+
+  const cardrows = Object.assign({}, ...playerSeasons.map(createCardRows))
+
+  function createCardRows(playerseason){
+    let temparr = []
+    let i = 0
+    while(i < json.length) {
+      if((json[i].FirstName+"_"+json[i].LastName.replace("-", "_")+"."+json[i].Season) === playerseason){
+        temparr.push({
+          id: json[i].FirstName+json[i].LastName.replace("-", "_")+json[i].CardNumber+json[i].Set+json[i].Season+json[i].Insert+json[i].Parallel,
+          manufacturer: json[i].Manufacturer,
+          set: json[i].Set,
+          insert: json[i].Insert,
+          parallel: json[i].Parallel,
+          number: json[i].CardNumber,
+          notes: ""
+        })
+      }
+      i++
+    }
+    return {[playerseason]: temparr}
+  }
+  
   return (
-    <DataTable rows={rows2} headers={headers2}>
+    <DataTable rows={playerrows} headers={playerHeaders}>
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps, getBatchActionProps, onInputChange }) => (
         <>
           <TableToolbar>
@@ -143,14 +142,14 @@ function App() {
               {rows.map((row) => (
                 <>
                   <TableExpandRow {...getRowProps({ row })}>
-                    <TableCell><img src={images[row.cells[0].value + '_' + row.cells[1].value]} alt={row.cells[0].value + ' ' + row.cells[1].value}></img></TableCell>
+                    <TableCell><img src={images[row.cells[0].value + '_' + row.cells[1].value.replace("-", "_")]} alt={row.cells[0].value + ' ' + row.cells[1].value}></img></TableCell>
                     {row.cells.map((cell) => (
                       <TableCell key={cell.id}>{cell.value}</TableCell>
                     ))}
                   </TableExpandRow>
                   {row.isExpanded && (
                     <TableExpandedRow colSpan={headers.length + 2}>
-                      <DataTable rows={rows1} headers={headers1}>
+                      <DataTable rows={seasonrows[row.cells[0].value + '_' + row.cells[1].value.replace("-", "_")]} headers={seasonHeaders}>
                         {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
                           <Table {...getTableProps()}>
                             <TableHead>
@@ -167,12 +166,12 @@ function App() {
                                 <>
                                   <TableExpandRow {...getRowProps({ row })}>
                                     {row.cells.map((cell) => (
-                                      <TableCell key={cell.id}>{cell.value}</TableCell>
+                                      <TableCell key={cell.id}>{cell.value.split(".")[1]}</TableCell>
                                     ))}
                                   </TableExpandRow>
                                   {row.isExpanded && (
                                     <TableExpandedRow colSpan={headers.length + 2}>
-                                      <DataTable rows={rows3} headers={headers3}>
+                                      <DataTable rows={cardrows[row.cells[0].value]} headers={cardHeaders}>
                                         {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
                                           <Table {...getTableProps()}>
                                             <TableHead>
