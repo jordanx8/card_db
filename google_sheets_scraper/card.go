@@ -11,16 +11,16 @@ import (
 )
 
 type Card struct {
-	FirstName     string   `json:"FirstName"`
-	LastName      string   `json:"LastName"`
-	SeasonsPlayed string   `json:"SeasonsPlayed"`
-	Season        string   `json:"Season"`
-	Manufacturer  string   `json:"Manufacturer"`
-	Set           string   `json:"Set"`
-	Insert        string   `json:"Insert"`
-	Parallel      string   `json:"Parallel"`
-	CardNumber    string   `json:"CardNumber"`
-	Notes         []string `json:"Notes"`
+	FirstName     string `json:"FirstName"`
+	LastName      string `json:"LastName"`
+	SeasonsPlayed string `json:"SeasonsPlayed"`
+	Season        string `json:"Season"`
+	Manufacturer  string `json:"Manufacturer"`
+	Set           string `json:"Set"`
+	Insert        string `json:"Insert"`
+	Parallel      string `json:"Parallel"`
+	CardNumber    string `json:"CardNumber"`
+	Notes         string `json:"Notes"`
 }
 
 func scrapeCards(resp *sheets.ValueRange, sheetName string) []Card {
@@ -61,17 +61,18 @@ func scrapeCards(resp *sheets.ValueRange, sheetName string) []Card {
 				}
 				c.Parallel = row[2].(string)
 				c.CardNumber = row[3].(string)
-				c.Notes = nil
+				c.Notes = ""
 				if len(row) == 5 {
-					notesArr := strings.FieldsFunc(row[4].(string), func(r rune) bool {
-						if r == ',' {
-							return true
-						}
-						return false
-					})
-					for _, note := range notesArr {
-						c.Notes = append(c.Notes, strings.TrimSpace(note))
-					}
+					c.Notes = row[4].(string)
+					// notesArr := strings.FieldsFunc(row[4].(string), func(r rune) bool {
+					// 	if r == ',' {
+					// 		return true
+					// 	}
+					// 	return false
+					// })
+					// for _, note := range notesArr {
+					// 	c.Notes = append(c.Notes, strings.TrimSpace(note))
+					// }
 				}
 				ready = true
 			}
@@ -81,7 +82,7 @@ func scrapeCards(resp *sheets.ValueRange, sheetName string) []Card {
 			}
 		}
 		file, _ := json.MarshalIndent(cards, "", " ")
-		_ = ioutil.WriteFile(sheetName+".json", file, 0644)
+		_ = ioutil.WriteFile("../frontend/src/"+sheetName+".json", file, 0644)
 		fmt.Println(len(cards), "cards were scraped.")
 	}
 	return cards
