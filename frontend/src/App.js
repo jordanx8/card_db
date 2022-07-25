@@ -164,14 +164,6 @@ function App() {
                       <DataTable rows={seasonrows[row.cells[0].value + '_' + row.cells[1].value.replace("-", "_")]} headers={seasonHeaders}>
                         {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
                           <>
-                            {/* <TableToolbar>
-                              <TableToolbarContent>
-                                <TableToolbarSearch
-                                  tabIndex={getBatchActionProps().shouldShowBatchActions ? -1 : 0}
-                                  onChange={onInputChange}
-                                />
-                              </TableToolbarContent>
-                            </TableToolbar> */}
                             <Table {...getTableProps()}>
                               <TableHead>
                                 <TableRow>
