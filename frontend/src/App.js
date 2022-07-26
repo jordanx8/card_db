@@ -26,14 +26,13 @@ function App() {
   function searchJSON(search){
     setJson(require('./Pelicans.json'))
     let searchTerms = search.target.value.split(" ")
-    if(searchTerms.length > 1)
+    console.log(searchTerms)
+    if(searchTerms.length > 0)
     {
       for(let i = 0; i < searchTerms.length; i++){
         setJson(cards => cards.filter(card => JSON.stringify(card).toLowerCase().includes(searchTerms[i].toLowerCase())))
       }
-      return
     }
-    setJson(cards => cards.filter(card => JSON.stringify(card).toLowerCase().includes(search.target.value.toLowerCase())))
   }
 
   const playerrows = json.map(getPlayers).filter(checkNil)
@@ -47,12 +46,18 @@ function App() {
       i++
     }
     playerNames.push(card.FirstName + " " + card.LastName)
+    let count = 0
+    for(i = 0; i < json.length; i++){
+      if((json[i].FirstName+ " " + json[i].LastName) === (card.FirstName + " " + card.LastName)){
+        count++
+      }
+    }
     return {
       id: card.FirstName + " " + card.LastName,
       firstname: card.FirstName,
       lastname: card.LastName,
       seasonsplayed: card.SeasonsPlayed,
-      numcards: 0
+      numcards: count
     }
   }
 

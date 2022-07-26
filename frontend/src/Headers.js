@@ -13,7 +13,7 @@ export const playerHeaders = [
     },
     {
       key: 'numcards',
-      header: "Number of Cards"
+      header: "Total Number of Cards"
     }
 ]
 
