@@ -12,8 +12,9 @@ import {
   TableToolbar,
   TableToolbarSearch,
   TableToolbarContent,
+  Button
 } from '@carbon/react';
-import React, {useState} from "react";
+import React, { useState } from "react";
 import './App.scss';
 import { playerHeaders, seasonHeaders, cardHeaders } from './Headers.js';
 
@@ -23,13 +24,12 @@ function App() {
 
   const [json, setJson] = useState(require('./Pelicans.json'))
 
-  function searchJSON(search){
+  function searchJSON(search) {
     setJson(require('./Pelicans.json'))
     let searchTerms = search.target.value.split(" ")
     console.log(searchTerms)
-    if(searchTerms.length > 0)
-    {
-      for(let i = 0; i < searchTerms.length; i++){
+    if (searchTerms.length > 0) {
+      for (let i = 0; i < searchTerms.length; i++) {
         setJson(cards => cards.filter(card => JSON.stringify(card).toLowerCase().includes(searchTerms[i].toLowerCase())))
       }
     }
@@ -47,8 +47,8 @@ function App() {
     }
     playerNames.push(card.FirstName + " " + card.LastName)
     let count = 0
-    for(i = 0; i < json.length; i++){
-      if((json[i].FirstName+ " " + json[i].LastName) === (card.FirstName + " " + card.LastName)){
+    for (i = 0; i < json.length; i++) {
+      if ((json[i].FirstName + " " + json[i].LastName) === (card.FirstName + " " + card.LastName)) {
         count++
       }
     }
@@ -142,6 +142,14 @@ function App() {
                 onChange={searchJSON}
               />
             </TableToolbarContent>
+            <Button
+              tabIndex={getBatchActionProps().shouldShowBatchActions ? -1 : 0}
+              onClick={() => console.log('clicked')}
+              size="small"
+              kind="primary"
+            >
+              Add new
+            </Button>
           </TableToolbar>
           <Table {...getTableProps()}>
             <TableHead>
