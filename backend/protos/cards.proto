@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/jordanx8/card_db";
+option go_package = "github.com/jordanx8/card_db/backend/protos";
 
 package main;
 

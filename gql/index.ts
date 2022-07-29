@@ -23,16 +23,16 @@ const typeDefs = gql`
   }
 
   type Card {
-    firstname: String
-    lastname: String
-    seasonsplayed: String
-    season: String
-    manufacturer: String
-    set: String
-    insert: String
-    parallel: String
-    cardnumber: String
-    notes: String
+    FirstName: String
+    LastName: String
+    SeasonsPlayed: String
+    Season: String
+    Manufacturer: String
+    Set: String
+    Insert: String
+    Parallel: String
+    CardNumber: String
+    Notes: String
   }
 
   type Query {
