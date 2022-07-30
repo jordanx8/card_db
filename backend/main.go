@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"time"
 
 	pb "github.com/jordanx8/card_db/backend/protos"
@@ -19,7 +20,9 @@ type CardService struct {
 }
 
 func main() {
-	fmt.Println("App starting")
+	if len(os.Args) <= 1 {
+		fmt.Println("forgot to add mongo pw")
+	}
 	// ctx := context.Background()
 	// b, err := ioutil.ReadFile("credentials.json")
 	// if err != nil {

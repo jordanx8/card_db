@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -11,13 +12,16 @@ import (
 )
 
 func seedToMongo(cards []Card, collectionName string) {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
+	secret := os.Args[1]
+	clientOptions := options.Client().ApplyURI("mongodb+srv://" + secret + "@carddatabase.3nsgdce.mongodb.net/?retryWrites=true&w=majority").SetServerAPIOptions(serverAPIOptions)
 	// Connect to the MongoDB and return Client instance
 	mongoClient, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Fatalf("mongo.Connect() ERROR: %v", err)
 	}
-	mongoCtx, _ := context.WithTimeout(context.Background(), 3*time.Second)
+	mongoCtx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
 	col := mongoClient.Database("Cards").Collection(collectionName)
 	if err = col.Drop(mongoCtx); err != nil {
 		log.Fatal(err)

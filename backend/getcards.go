@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"os"
 	"sort"
 
 	pb "github.com/jordanx8/card_db/backend/protos"
@@ -28,7 +28,9 @@ func (c Card) ConvertToGRPC() *pb.Card {
 }
 
 func (s CardService) GetCards(ctx context.Context, empty *pb.Empty) (*pb.CardArray, error) {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
+	secret := os.Args[1]
+	clientOptions := options.Client().ApplyURI("mongodb+srv://" + secret + "@carddatabase.3nsgdce.mongodb.net/?retryWrites=true&w=majority").SetServerAPIOptions(serverAPIOptions)
 	// Connect to the MongoDB and return Client instance
 	mongoClient, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
@@ -62,7 +64,6 @@ func (s CardService) GetCards(ctx context.Context, empty *pb.Empty) (*pb.CardArr
 		log.Fatal(err)
 	}
 
-	fmt.Println(results[0])
 	sort.Slice(results, func(i, j int) bool {
 		if results[i].LastName != results[j].LastName {
 			return results[i].LastName < results[j].LastName
@@ -84,7 +85,7 @@ func (s CardService) GetCards(ctx context.Context, empty *pb.Empty) (*pb.CardArr
 		}
 		return results[i].CardNumber < results[j].CardNumber
 	})
-	fmt.Println(results[0])
+
 	var cards []*pb.Card
 	for _, v := range results {
 		cards = append(cards, v.ConvertToGRPC())
