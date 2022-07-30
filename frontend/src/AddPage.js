@@ -12,8 +12,13 @@ import {
 import './AddPage.scss';
 
 function AddPage() {
+    function submitCardAddition(){
+        console.log("function")
+    }
+
     return (
-        <Form
+        <form
+        onSubmit={submitCardAddition}
             style={{
                 background: 'black',
             }}>
@@ -24,41 +29,49 @@ function AddPage() {
                 }}
             >
                 <Stack gap={7}>
-                    <Search
-                        id="search-1"
-                        labelText="Search Players"
-                        placeholder="Search Players"
-                    />
                     <TextInput
                         id="one"
-                        labelText="Season"
+                        labelText="FirstName"
+                        onChange={console.log("")}
                     />
                     <TextInput
                         id="two"
-                        labelText="Manufacturer"
+                        labelText="LastName"
                     />
                     <TextInput
                         id="three"
-                        labelText="Set"
+                        labelText="Seasons Played"
                     />
                     <TextInput
                         id="four"
-                        labelText="Insert"
+                        labelText="Season"
                     />
                     <TextInput
                         id="five"
-                        labelText="Parallel"
+                        labelText="Manufacturer"
                     />
                     <TextInput
                         id="six"
+                        labelText="Set"
+                    />
+                    <TextInput
+                        id="seven"
+                        labelText="Insert"
+                    />
+                    <TextInput
+                        id="eight"
+                        labelText="Parallel"
+                    />
+                    <TextInput
+                        id="nine"
                         labelText="Notes"
                     />
-                    <Button>
+                    <Button type="submit">
                         Submit
                     </Button>
                 </Stack>
             </FormGroup>
-        </Form>
+        </form>
     )
 }
 

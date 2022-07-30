@@ -39,6 +39,10 @@ const typeDefs = gql`
     cards(empty: Int): [Card]
     players(empty: Int): [Player]
   }
+
+  type Mutation {
+    addcard(FirstName: String, LastName: String, SeasonsPlayed: String, Season: String, Manufacturer: String, Set: String, Insert: String, Parallel: String, CardNumber: String, Notes: String): Int
+  }
 `;
 
 const resolvers = {
@@ -58,7 +62,16 @@ const resolvers = {
       }));
     },
   },
-}
+    Mutation: {
+      addcard: (parent, args, context, info) => {
+        return new Promise((resolve) => client.AddCard({FirstName: args["FirstName"], LastName: args["LastName"], SeasonsPlayed: args["SeasonsPlayed"], Season: args["Season"], Manufacturer: args["Manufacturer"], Set: args["Set"], Insert: args["Insert"], Parallel: args["Parallel"], CardNumber: args["CardNumber"], Notes: args["Notes"]}, function (err, response) {
+          if (err == undefined) {
+            resolve(response.success);
+          }
+        }));
+      },
+    },
+  }
 
 const server = new ApolloServer({
   typeDefs,

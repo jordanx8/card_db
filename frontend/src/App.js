@@ -130,7 +130,7 @@ function App() {
       while (i < json.length) {
         if ((json[i].FirstName + "_" + json[i].LastName.replace("-", "_") + "." + json[i].Season) === playerseason) {
           temparr.push({
-            id: json[i].FirstName + json[i].LastName.replace("-", "_") + json[i].CardNumber + json[i].Set + json[i].Season + json[i].Insert + json[i].Parallel,
+            id: json[i].FirstName + json[i].LastName.replace("-", "_") + json[i].CardNumber + json[i].Set + json[i].Season + json[i].Insert + json[i].Parallel + json[i].Manufacturer + json[i].Notes,
             manufacturer: json[i].Manufacturer,
             set: json[i].Set,
             insert: json[i].Insert,
