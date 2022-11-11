@@ -13,7 +13,7 @@ const packageDefinition = protoLoader.loadSync(
     includeDirs: ['protos']
   });
 const proto = grpc.loadPackageDefinition(packageDefinition).main;
-const client = new proto.CardService('localhost:8080', grpc.credentials.createInsecure());
+const client = new proto.CardService('127.0.0.1:8080', grpc.credentials.createInsecure());
 
 const typeDefs = gql`
   type Player {
@@ -48,6 +48,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     cards: (parent, args, context, info) => {
+      console.log("cards")
       return new Promise((resolve) => client.GetCards({}, function (err, response) {
         if (err == undefined) {
           resolve(response.cards);
@@ -64,6 +65,7 @@ const resolvers = {
   },
     Mutation: {
       addcard: (parent, args, context, info) => {
+        console.log(args)
         return new Promise((resolve) => client.AddCard({FirstName: args["FirstName"], LastName: args["LastName"], SeasonsPlayed: args["SeasonsPlayed"], Season: args["Season"], Manufacturer: args["Manufacturer"], Set: args["Set"], Insert: args["Insert"], Parallel: args["Parallel"], CardNumber: args["CardNumber"], Notes: args["Notes"]}, function (err, response) {
           if (err == undefined) {
             resolve(response.success);

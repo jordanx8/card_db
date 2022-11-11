@@ -1,0 +1,49 @@
+[
+    {
+        "playerName": "Jrue Holiday",
+        "season": "2013-2014",
+        "manufacturer": "Panini",
+        "set": "NBA Hoops",
+        "insert": "",
+        "parallel": "Base",
+        "cardNumber": "243",
+        "notes": [
+            "RC"
+        ]
+    },
+    {
+        "playerName": "Jrue Holiday",
+        "season": "2013-2014",
+        "manufacturer": "Panini",
+        "set": "NBA Hoops",
+        "insert": "",
+        "parallel": "Prizm",
+        "cardNumber": "243",
+        "notes": [
+            "RC"
+        ]
+    },
+    {
+        "playerName": "Jrue Holiday",
+        "season": "2020-2021",
+        "manufacturer": "Panini",
+        "set": "NBA Hoops",
+        "insert": "",
+        "parallel": "Prizm",
+        "cardNumber": "243",
+        "notes": [
+            "RC",
+            "Sticker Auto"
+        ]
+    },
+    {
+        "playerName": "Zion Williamson",
+        "season": "2020-2021",
+        "manufacturer": "Panini",
+        "set": "NBA Hoops",
+        "insert": "",
+        "parallel": "Prizm",
+        "cardNumber": "243",
+        "notes": []
+    }
+]

@@ -19,13 +19,14 @@ import './App.scss';
 import { playerHeaders, seasonHeaders, cardHeaders } from './Headers.js';
 import { GET_CARDS } from './CardQuery';
 import { useQuery } from "@apollo/client";
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   let playerNames = []
   let playerSeasons = []
 
   const { loading, error, data } = useQuery(GET_CARDS);
-  const [json, setJson] = useState(undefined)
+  const [json, setJson] = useState(undefined);
   useEffect(() => {
     if (loading === false && data) {
       setJson(data.cards);
@@ -48,7 +49,7 @@ function App() {
 
     }
     console.log(json)
-    const playerrows = json.map(getPlayers).filter(checkNil)
+    const playerrows = json?.map(getPlayers).filter(checkNil)
 
     function getPlayers(card) {
       let i = 0;
@@ -66,7 +67,7 @@ function App() {
         }
       }
       return {
-        id: card.FirstName + " " + card.LastName,
+        id: card.FirstName + " " + card.LastName + uuidv4(),
         firstname: card.FirstName,
         lastname: card.LastName,
         seasonsplayed: card.SeasonsPlayed,
@@ -82,7 +83,7 @@ function App() {
 
     function getImage(x) {
       let num = "01"
-      const twonames = ["Trey_Murphy", "Larry_Nance", "Cameron_Thomas"]
+      const twonames = ["Trey_Murphy", "Larry_Nance", "Cameron_Thomas", "Anthony_Davis"]
       for (let i = 0; i < twonames.length; i++) {
         if (x.firstname + "_" + x.lastname.replace("-", "_") === twonames[i]) {
           num = "02"
@@ -91,7 +92,7 @@ function App() {
       return { [x.firstname + "_" + x.lastname.replace("-", "_")]: "https://www.basketball-reference.com/req/202106291/images/players/" + x.lastname.toLowerCase().slice(0, 5) + x.firstname.toLowerCase().slice(0, 2) + num + ".jpg" }
     }
 
-    const seasonobjects = json.map(getSeasons).filter(checkNil)
+    const seasonobjects = json?.map(getSeasons).filter(checkNil)
 
     function getSeasons(card) {
       let i = 0;
@@ -103,12 +104,12 @@ function App() {
       }
       playerSeasons.push(card.FirstName + "_" + card.LastName.replace("-", "_") + "." + card.Season)
       return {
-        id: card.FirstName + "_" + card.LastName.replace("-", "_") + "." + card.Season,
+        id: card.FirstName + "_" + card.LastName.replace("-", "_") + "." + card.Season + uuidv4(),
         season: card.FirstName + "_" + card.LastName.replace("-", "_") + "." + card.Season
       }
     }
 
-    const seasonrows = Object.assign({}, ...playerrows.map(createSeasonRows))
+    const seasonrows = Object.assign({}, ...playerrows?.map(createSeasonRows))
 
     function createSeasonRows(playerrow) {
       let temparr = []
@@ -122,7 +123,7 @@ function App() {
       return { [playerrow.firstname + "_" + playerrow.lastname.replace("-", "_")]: temparr }
     }
 
-    const cardrows = Object.assign({}, ...playerSeasons.map(createCardRows))
+    const cardrows = Object.assign({}, ...playerSeasons?.map(createCardRows))
 
     function createCardRows(playerseason) {
       let temparr = []
@@ -130,7 +131,7 @@ function App() {
       while (i < json.length) {
         if ((json[i].FirstName + "_" + json[i].LastName.replace("-", "_") + "." + json[i].Season) === playerseason) {
           temparr.push({
-            id: json[i].FirstName + json[i].LastName.replace("-", "_") + json[i].CardNumber + json[i].Set + json[i].Season + json[i].Insert + json[i].Parallel + json[i].Manufacturer + json[i].Notes,
+            id: json[i].FirstName + json[i].LastName.replace("-", "_") + json[i].CardNumber + json[i].Set + json[i].Season + json[i].Insert + json[i].Parallel + json[i].Manufacturer + json[i].Notes + uuidv4(),
             manufacturer: json[i].Manufacturer,
             set: json[i].Set,
             insert: json[i].Insert,
@@ -141,10 +142,9 @@ function App() {
         }
         i++
       }
+
       return { [playerseason]: temparr }
     }
-
-    if (json) {
 
       return (
         <DataTable rows={playerrows} headers={playerHeaders}>
@@ -171,7 +171,7 @@ function App() {
                   <TableRow>
                     <TableExpandHeader></TableExpandHeader>
                     <TableHeader></TableHeader>
-                    {headers.map((header) => (
+                    {headers?.map((header) => (
                       <TableHeader  {...getHeaderProps({ header, isSortable: true })}>
                         {header.header}
                       </TableHeader >
@@ -179,11 +179,11 @@ function App() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {rows?.map((row) => (
                     <>
                       <TableExpandRow {...getRowProps({ row })}>
                         <TableCell><img src={images[row.cells[0].value + '_' + row.cells[1].value.replace("-", "_")]} alt={row.cells[0].value + ' ' + row.cells[1].value}></img></TableCell>
-                        {row.cells.map((cell) => (
+                        {row.cells?.map((cell) => (
                           <TableCell key={cell.id}>{cell.value}</TableCell>
                         ))}
                       </TableExpandRow>
@@ -195,7 +195,7 @@ function App() {
                                 <Table {...getTableProps()}>
                                   <TableHead>
                                     <TableRow>
-                                      {headers.map((header) => (
+                                      {headers?.map((header) => (
                                         <TableHeader colSpan={headers.length + 1}  {...getHeaderProps({ header, isSortable: true })}>
                                           {header.header}
                                         </TableHeader >
@@ -203,10 +203,10 @@ function App() {
                                     </TableRow>
                                   </TableHead>
                                   <TableBody>
-                                    {rows.map((row) => (
+                                    {rows?.map((row) => (
                                       <>
                                         <TableExpandRow {...getRowProps({ row })}>
-                                          {row.cells.map((cell) => (
+                                          {row.cells?.map((cell) => (
                                             <TableCell key={cell.id}>{cell.value.split(".")[1]}</TableCell>
                                           ))}
                                         </TableExpandRow>
@@ -217,7 +217,7 @@ function App() {
                                                 <Table {...getTableProps()}>
                                                   <TableHead>
                                                     <TableRow>
-                                                      {headers.map((header) => (
+                                                      {headers?.map((header) => (
                                                         <TableHeader  {...getHeaderProps({ header, isSortable: true })}>
                                                           {header.header}
                                                         </TableHeader >
@@ -225,9 +225,9 @@ function App() {
                                                     </TableRow>
                                                   </TableHead>
                                                   <TableBody>
-                                                    {rows.map((row) => (
+                                                    {rows?.map((row) => (
                                                       <TableRow {...getRowProps({ row })}>
-                                                        {row.cells.map((cell) => (
+                                                        {row.cells?.map((cell) => (
                                                           <TableCell key={cell.id}>{cell.value}</TableCell>
                                                         ))}
                                                       </TableRow>
@@ -255,7 +255,6 @@ function App() {
           )}
         </DataTable>
       );
-    }
   }
 }
 

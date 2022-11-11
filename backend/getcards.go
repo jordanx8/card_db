@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"sort"
@@ -28,6 +29,7 @@ func (c Card) ConvertToGRPC() *pb.Card {
 }
 
 func (s CardService) GetCards(ctx context.Context, empty *pb.Empty) (*pb.CardArray, error) {
+	fmt.Println("GetCards()")
 	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
 	secret := os.Args[1]
 	clientOptions := options.Client().ApplyURI("mongodb+srv://" + secret + "@carddatabase.3nsgdce.mongodb.net/?retryWrites=true&w=majority").SetServerAPIOptions(serverAPIOptions)

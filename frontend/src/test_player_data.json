@@ -1,0 +1,20 @@
+[
+    {
+        "firstName": "Jrue",
+        "lastName": "Holiday",
+        "seasonsPlayed": "2013-2020",
+        "seasons": [
+            "2013-2014 (New Orleans Pelicans)",
+            "2020-2021 (Milwaukee Bucks)"
+        ]
+    },
+    {
+        "firstName": "Zion",
+        "lastName": "Williamson",
+        "seasonsPlayed": "2019-present",
+        "seasons": [
+            "2019-2020 (New Orleans Pelicans)",
+            "2020-2021 (New Orleans Pelicans)"
+        ]
+    }
+]
