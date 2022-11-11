@@ -8,8 +8,8 @@ function SeasonRow(props) {
     return (
         <React.Fragment key={uuidv4()}>
             <tr>
-                <td>{props.season}</td>
-                <td><DropdownButton state={dropdown} setState={setDropdown} /></td>
+                <th>{props.season}</th>
+                <th><DropdownButton state={dropdown} setState={setDropdown} /></th>
             </tr>
             {dropdown &&
                 <tr>
@@ -17,13 +17,13 @@ function SeasonRow(props) {
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>Season</td>
-                                    <td>Manufacturer</td>
-                                    <td>Set</td>
-                                    <td>Insert</td>
-                                    <td>Parallel</td>
-                                    <td>Card Number</td>
-                                    <td>Notes</td>
+                                    <th>Season</th>
+                                    <th>Manufacturer</th>
+                                    <th>Set</th>
+                                    <th>Insert</th>
+                                    <th>Parallel</th>
+                                    <th>Card Number</th>
+                                    <th>Notes</th>
                                 </tr>
                                 {props.cardData.map(card => (
                                     <CardRow name={card.playerName}
