@@ -1,7 +1,6 @@
 function CardRow(props) {
     return (
         <tr>
-            <td>{props.season}</td>
             <td>{props.manufacturer}</td>
             <td>{props.set}</td>
             <td>{props.insert}</td>

@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown } from 'react-bootstrap-icons';
+import Button from 'react-bootstrap/Button';
 
 function DropdownButton(props) {
     function useStateHandler(){
@@ -8,11 +8,11 @@ function DropdownButton(props) {
     if(!props.state)
     {
         return (
-            <button onClick={useStateHandler}><ArrowUp/></button>
+            <Button onClick={useStateHandler}>Expand</Button>
         );
     }else{
         return (
-            <button onClick={useStateHandler}><ArrowDown/></button>
+            <Button onClick={useStateHandler}>Collapse</Button>
         );
     }
 
