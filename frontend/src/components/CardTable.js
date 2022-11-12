@@ -2,23 +2,16 @@ import React, { useState } from 'react';
 import PlayerRow from "./PlayerRow";
 import Table from 'react-bootstrap/Table';
 import InputGroupHandler from './InputGroupHandler';
+import { nameToFilter } from '../util/filters';
 
 function CardTable(props) {
   const [cards, setCards] = useState(props.cardData.default);
   const [players, setPlayers] = useState(props.playerData.default);
-  const [checked, setChecked] = useState(false);
-  const [originalData, setOriginalData] = useState(props.cardData.default)
-
-  function nameToFilter(name) {
-    return function filterCardsByName(card) {
-      return card.playerName === name;
-    }
-  }
 
   return (
     <>
       <h1>{props.tableName}</h1>
-      <InputGroupHandler setSearchString={props.setSearchString} originalData={originalData} setOriginalData={setOriginalData} checked={checked} setChecked={setChecked} cards={cards} setCards={setCards} players={players} setPlayers={setPlayers} />
+      <InputGroupHandler setSearchString={props.setSearchString} cards={cards} setCards={setCards} players={players} setPlayers={setPlayers} />
       <Table striped bordered hover responsive variant="dark">
         <thead>
           <tr>
