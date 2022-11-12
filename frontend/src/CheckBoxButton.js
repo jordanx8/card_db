@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
 function CheckBoxButton(props) {

@@ -1,7 +1,6 @@
 import SeasonRow from "./SeasonRow";
 import DropdownButton from "./DropdownButton";
 import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 function PlayerRow(props) {
     const [dropdown, setDropdown] = useState(false);
@@ -23,26 +22,28 @@ function PlayerRow(props) {
         }
     }
 
-    return (
-        <React.Fragment key={uuidv4()}>
-            <tr>
-                <td><img src={getImage(props.firstName, props.lastName)} alt={fullName}></img></td>
-                <td>{props.firstName}</td>
-                <td>{props.lastName}</td>
-                <td>{props.seasonsPlayed}</td>
-                <td>{props.cardData.length}</td>
-                <td><DropdownButton state={dropdown} setState={setDropdown} /></td>
-            </tr>
-            {dropdown &&
-                <React.Fragment key={uuidv4()}>
-                    {props.seasons.map(season => (
-                        <SeasonRow season={season} cardData={props.cardData.filter(seasonToFilter(season))} />
-                    ))
-                    }
-                </React.Fragment>
-            }
-        </React.Fragment>
-    );
+    if (props.cardData.length > 0) {
+        return (
+            <React.Fragment>
+                <tr>
+                    <td><img src={getImage(props.firstName, props.lastName)} alt={fullName}></img></td>
+                    <td>{props.firstName}</td>
+                    <td>{props.lastName}</td>
+                    <td>{props.seasonsPlayed}</td>
+                    <td>{props.cardData.length}</td>
+                    <td><DropdownButton state={dropdown} setState={setDropdown} /></td>
+                </tr>
+                {dropdown &&
+                    <React.Fragment>
+                        {props.seasons.map(season => (
+                            <SeasonRow season={season} cardData={props.cardData.filter(seasonToFilter(season))} />
+                        ))
+                        }
+                    </React.Fragment>
+                }
+            </React.Fragment>
+        );
+    }
 }
 
 export default PlayerRow;
