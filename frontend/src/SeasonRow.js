@@ -5,13 +5,13 @@ import React, { useState } from 'react';
 function SeasonRow(props) {
     const [dropdown, setDropdown] = useState(false);
     return (
-        <React.Fragment>
+        <>
             <tr>
                 <th colSpan={5}>{props.season}</th>
                 <th><DropdownButton state={dropdown} setState={setDropdown} /></th>
             </tr>
             {dropdown &&
-        <React.Fragment>
+        <>
                     <tr>
                         <th>Manufacturer</th>
                         <th>Set</th>
@@ -32,9 +32,9 @@ function SeasonRow(props) {
                         />
                     ))
                     }
-        </React.Fragment>
+        </>
             }
-        </React.Fragment>
+        </>
     );
 }
 

@@ -16,7 +16,7 @@ function CardTable(props) {
   }
 
   return (
-    <React.Fragment>
+    <>
       <h1>{props.tableName}</h1>
       <InputGroupHandler setSearchString={props.setSearchString} originalData={originalData} setOriginalData={setOriginalData} checked={checked} setChecked={setChecked} cards={cards} setCards={setCards} players={players} setPlayers={setPlayers} />
       <Table striped bordered hover responsive variant="dark">
@@ -37,7 +37,7 @@ function CardTable(props) {
           }
         </tbody>
       </Table>
-    </React.Fragment>
+    </>
   );
 }
 

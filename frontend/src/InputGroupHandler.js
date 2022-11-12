@@ -18,7 +18,7 @@ function InputGroupHandler(props) {
     }
 
     return (
-        <React.Fragment>
+        <>
             <InputGroup className="mb-3">
                 <Form.Control
                     placeholder="Search"
@@ -29,7 +29,7 @@ function InputGroupHandler(props) {
                 />
                 <CheckBoxButton name={"Current Players"} filter={currentPlayersFilter} data={props.players} setData={props.setPlayers} checked={props.checked} setChecked={props.setChecked} originalData={props.originalData} setOriginalData={props.setOriginalData}/>
             </InputGroup>
-        </React.Fragment>
+        </>
     )
 }
 

@@ -24,7 +24,7 @@ function PlayerRow(props) {
 
     if (props.cardData.length > 0) {
         return (
-            <React.Fragment>
+            <>
                 <tr>
                     <td><img src={getImage(props.firstName, props.lastName)} alt={fullName}></img></td>
                     <td>{props.firstName}</td>
@@ -34,14 +34,14 @@ function PlayerRow(props) {
                     <td><DropdownButton state={dropdown} setState={setDropdown} /></td>
                 </tr>
                 {dropdown &&
-                    <React.Fragment>
+                    <>
                         {props.seasons.map(season => (
                             <SeasonRow season={season} cardData={props.cardData.filter(seasonToFilter(season))} />
                         ))
                         }
-                    </React.Fragment>
+                    </>
                 }
-            </React.Fragment>
+            </>
         );
     }
 }
