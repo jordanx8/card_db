@@ -19,7 +19,7 @@ function CardTable(props) {
             <th>First Name:</th>
             <th>Last Name:</th>
             <th>Seasons Played:</th>
-            <th>Number of Cards:</th>
+            <th colSpan={2}>Number of Cards:</th>
             <th></th>
           </tr>
         </thead>

@@ -16,7 +16,7 @@ function PlayerRow(props) {
                     <td>{props.firstName}</td>
                     <td>{props.lastName}</td>
                     <td>{props.seasonsPlayed}</td>
-                    <td>{props.cardData.length}</td>
+                    <td colSpan={2}>{props.cardData.length}</td>
                     <td><DropdownButton state={dropdown} setState={setDropdown} /></td>
                 </tr>
                 {dropdown &&

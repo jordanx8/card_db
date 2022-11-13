@@ -9,7 +9,8 @@
         "cardNumber": "243",
         "notes": [
             "RC"
-        ]
+        ],
+        "image": "https://www.tcdb.com/Images/Large/Basketball/296190/296190-17937597Fr.jpg"
     },
     {
         "playerName": "Jrue Holiday",
@@ -21,7 +22,8 @@
         "cardNumber": "243",
         "notes": [
             "RC"
-        ]
+        ],
+        "image": "https://www.tcdb.com/Images/Large/Basketball/296190/296190-17937597Fr.jpg"
     },
     {
         "playerName": "Jrue Holiday",
@@ -35,7 +37,7 @@
             "RC",
             "Sticker Auto"
         ]
-    },
+        },
     {
         "playerName": "Zion Williamson",
         "season": "2020-2021",
@@ -44,6 +46,7 @@
         "insert": "",
         "parallel": "Prizm",
         "cardNumber": "243",
-        "notes": []
+        "notes": [],
+        "image": "https://www.tcdb.com/Images/Large/Basketball/256855/256855-16142892Fr.jpg"
     }
 ]
