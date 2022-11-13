@@ -1,8 +1,8 @@
 import Image from 'react-bootstrap/Image'
 
-function CardImageColumn(props) {
+function CardImageColumn({ image }) {
     return (
-        <td><Image fluid width="99" height="140" src={props.image} /></td>
+        <td><Image fluid width="99" height="140" src={image} /></td>
     )
 }
 

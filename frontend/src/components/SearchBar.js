@@ -1,21 +1,17 @@
 import Form from 'react-bootstrap/Form';
-import React, { useRef } from 'react';
+import React from 'react';
 
-function SearchBar(props) {
-    const searchRef = useRef();
-
+function SearchBar({ state, setState }) {
     function searchHandler(event) {
-        //TODO: come up with search logic
-        console.log(searchRef.current.value)
+        setState(event.target.value)
     }
 
     return (
         <Form.Control
             placeholder="Search"
             aria-label="Search"
-            aria-describedby="basic-addon2"
             onChange={searchHandler}
-            ref={searchRef}
+            value={state}
         />
     )
 }

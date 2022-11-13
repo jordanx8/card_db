@@ -1,28 +1,27 @@
 import SeasonRow from "./SeasonRow";
 import DropdownButton from "./DropdownButton";
 import React, { useState } from 'react';
-import { seasonToFilter } from '../util/filters'
-import { getImage } from '../util/util'
+import { getImage, seasonToFilter } from '../util/util'
 
-function PlayerRow(props) {
+function PlayerRow({ firstName, lastName, seasons, seasonsPlayed, cardData }) {
     const [dropdown, setDropdown] = useState(false);
-    const fullName = props.firstName + " " + props.lastName;
+    const fullName = firstName + " " + lastName;
 
-    if (props.cardData.length > 0) {
+    if (cardData.length > 0) {
         return (
             <>
                 <tr>
-                    <td><img src={getImage(props.firstName, props.lastName)} alt={fullName}></img></td>
-                    <td>{props.firstName}</td>
-                    <td>{props.lastName}</td>
-                    <td>{props.seasonsPlayed}</td>
-                    <td colSpan={2}>{props.cardData.length}</td>
+                    <td><img src={getImage(firstName, lastName)} alt={fullName}></img></td>
+                    <td>{firstName}</td>
+                    <td>{lastName}</td>
+                    <td>{seasonsPlayed}</td>
+                    <td colSpan={2}>{cardData.length}</td>
                     <td><DropdownButton state={dropdown} setState={setDropdown} /></td>
                 </tr>
                 {dropdown &&
                     <>
-                        {props.seasons.map(season => (
-                            <SeasonRow season={season} cardData={props.cardData.filter(seasonToFilter(season))} />
+                        {seasons.map(season => (
+                            <SeasonRow season={season} cardData={cardData.filter(seasonToFilter(season))} />
                         ))
                         }
                     </>

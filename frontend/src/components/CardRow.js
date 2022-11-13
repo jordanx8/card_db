@@ -1,16 +1,16 @@
 import CardImageColumn from "./CardImageColumn";
 
-function CardRow(props) {
+function CardRow({ manufacturer, set, insert, parallel, cardNumber, notes, image }) {
     return (
         <>
             <tr>
-                <CardImageColumn image={props.image} />
-                <td>{props.manufacturer}</td>
-                <td>{props.set}</td>
-                <td>{props.insert}</td>
-                <td>{props.parallel}</td>
-                <td>{props.cardNumber}</td>
-                <td>{props.notes.map(note =>
+                <CardImageColumn image={image} />
+                <td>{manufacturer}</td>
+                <td>{set}</td>
+                <td>{insert}</td>
+                <td>{parallel}</td>
+                <td>{cardNumber}</td>
+                <td>{notes.map(note =>
                     (<div>{note}</div>))}</td>
             </tr>
         </>

@@ -2,13 +2,13 @@ import DropdownButton from "./DropdownButton";
 import CardRow from "./CardRow";
 import React, { useState } from 'react';
 
-function SeasonRow(props) {
+function SeasonRow({ season, cardData }) {
     const [dropdown, setDropdown] = useState(false);
-    if (props.cardData.length > 0) {
+    if (cardData.length > 0) {
         return (
             <>
                 <tr>
-                    <th colSpan={6}>{props.season}</th>
+                    <th colSpan={6}>{season}</th>
                     <th><DropdownButton state={dropdown} setState={setDropdown} /></th>
                 </tr>
                 {dropdown &&
@@ -22,9 +22,8 @@ function SeasonRow(props) {
                             <th>Card Number</th>
                             <th>Notes</th>
                         </tr>
-                        {props.cardData.map(card => (
-                            <CardRow name={card.playerName}
-                                season={card.season}
+                        {cardData.map(card => (
+                            <CardRow
                                 manufacturer={card.manufacturer}
                                 set={card.set}
                                 insert={card.insert}

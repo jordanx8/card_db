@@ -1,26 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
-function FilterButton({name, filter, data, setData}) {
-    const [originalData, setOriginalData] = useState([])
-    const [checked, setChecked] = useState(false);
-
+function FilterButton({ name, state, setState }) {
     function buttonHandler(e) {
-        setChecked(e.currentTarget.checked)
-        if(e.currentTarget.checked){
-            setOriginalData(data)
-            setData(data.filter(filter))
-        } else{
-            setData(originalData)
-        }
+        setState(e.currentTarget.checked)
     }
 
     return (
         <ToggleButton
-            id="toggle-check"
+            id={"toggle+" + name}
             type="checkbox"
             variant="outline-primary"
-            checked={checked}
+            checked={state}
             value="1"
             onChange={buttonHandler}>
             {name}

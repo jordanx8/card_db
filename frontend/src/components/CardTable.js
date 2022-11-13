@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
 import PlayerRow from "./PlayerRow";
 import Table from 'react-bootstrap/Table';
-import InputGroupHandler from './InputGroupHandler';
-import { nameToFilter } from '../util/filters';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FilterButton from './FilterButton';
+import SearchBar from './SearchBar';
+import { nameToFilter } from '../util/util';
+import * as playerData from '../test_player_data.json';
+import * as cardData from '../test_card_data.json';
 
-function CardTable(props) {
-  const [cards, setCards] = useState(props.cardData.default);
-  const [players, setPlayers] = useState(props.playerData.default);
+function CardTable({ tableName }) {
+  const [cards, setCards] = useState(cardData.default);
+  const [players, setPlayers] = useState(playerData.default);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPlayers, setCurrentPlayers] = useState(false);
+  const [rookieCards, setRookieCards] = useState(false);
+  const [autograph, setAutograph] = useState(false);
+  const [patch, setPatch] = useState(false);
 
   return (
     <>
-      <h1>{props.tableName}</h1>
-      <InputGroupHandler setSearchString={props.setSearchString} cards={cards} setCards={setCards} players={players} setPlayers={setPlayers} />
+      <h1>{tableName}</h1>
+      <InputGroup className="mb-3">
+        <SearchBar state={searchTerm} setState={setSearchTerm} />
+        <FilterButton name={"Current Players"} state={currentPlayers} setState={setCurrentPlayers} />
+        <FilterButton name={"RC"} state={rookieCards} setState={setRookieCards} />
+        <FilterButton name={"Auto"} state={autograph} setState={setAutograph} />
+        <FilterButton name={"Patch"} state={patch} setState={setPatch} />
+      </InputGroup>
       <Table striped bordered hover responsive variant="dark">
         <thead>
           <tr>
