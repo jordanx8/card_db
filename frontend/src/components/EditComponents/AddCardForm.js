@@ -52,7 +52,7 @@ function AddCardForm() {
                     <Form.Label>Select a Season</Form.Label>
                     <Form.Select>
                         {/* TODO: make dropdown not stay empty if select first player */}
-                        {(selectedPlayer != "") && players.filter(filterPlayerListDownTo(selectedPlayer))[0].seasons.map(season => (
+                        {(selectedPlayer !== "") && players.filter(filterPlayerListDownTo(selectedPlayer))[0].seasons.map(season => (
                             <ListDropdown text={season} />
                         ))
                         }
