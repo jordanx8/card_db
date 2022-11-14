@@ -20,3 +20,9 @@ export function seasonToFilter(season) {
         return season.includes(card.season);
     }
 }
+
+export function filterPlayerListDownTo(name) {
+    return function filterPlayersByName(player) {
+        return ((player.firstName +" "+player.lastName) === name)
+    }
+}

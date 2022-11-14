@@ -16,9 +16,9 @@ function Navigation() {
                             <Nav.Link href="/">New Orleans Pelicans</Nav.Link>
                             <Nav.Link href="/tigers">LSU Tigers</Nav.Link>
                             <NavDropdown title="Edit" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="/add/card">Add new card</NavDropdown.Item>
-                                <NavDropdown.Item href="/add/player">Add new player</NavDropdown.Item>
-                                <NavDropdown.Item href="/add/season">Add new season</NavDropdown.Item>
+                                <NavDropdown.Item href="/add/player">Add New Player</NavDropdown.Item>
+                                <NavDropdown.Item href="/add/season">Add New Season</NavDropdown.Item>
+                                <NavDropdown.Item href="/add/card">Add New Card</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
