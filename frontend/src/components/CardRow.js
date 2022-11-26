@@ -4,6 +4,7 @@ function CardRow({ manufacturer, set, insert, parallel, cardNumber, notes, image
     return (
         <>
             <tr>
+                {/* TODO: zoom button on cards */}
                 <CardImageColumn image={image} />
                 <td>{manufacturer}</td>
                 <td>{set}</td>

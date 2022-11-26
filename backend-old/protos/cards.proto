@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option go_package = "github.com/jordanx8/card_db/backend/protos";
+
+package main;
+
+service CardService {
+    rpc GetCards(Empty) returns (CardArray) {}
+    rpc GetPlayers(Empty) returns (PlayerArray) {}
+    rpc AddCard(Card) returns (Response) {}
+}
+
+message Card {
+    string FirstName = 1;
+    string LastName = 2;
+    string SeasonsPlayed = 3;
+    string Season = 4;
+    string Manufacturer = 5;
+    string Set = 6;
+    string Insert = 7;
+    string Parallel = 8;
+    string CardNumber = 9;
+    string Notes = 10;
+}
+
+message CardArray {
+    repeated Card cards = 1;
+}
+
+message Player {
+    string firstname = 1;
+    string lastname = 2;
+    string seasonsplayed = 3;
+}
+
+message PlayerArray {
+    repeated Player players = 1;
+}
+
+message Response {
+    int32 success = 1;
+}
+
+message Empty {
+}

@@ -7,24 +7,40 @@ import { filterPlayerListDownTo } from '../../util/util'
 
 function AddCardForm() {
     const [players, setPlayers] = useState(playerData.default);
-    const [selectedPlayer, setSelectedPlayer] = useState("");
-    const [autoChecked, setAutoChecked] = useState(false);
-    const [patchChecked, setPatchChecked] = useState(false);
+    const [formState, setFormState] = useState({
+        playerName: players[0].firstName + " " + players[0].lastName,
+        season: players[0].seasons[0],
+        manufacturer: "",
+        set: "",
+        parallel: "",
+        cardNumber: "",
+        imageLink: "",
+    });
+    function handleInputChange(event) {
+        console.log(formState)
+        const value = event.target.value
+        const name = event.target.id
+        if(name === "playerName")
+        {
+            setFormState({
+                ...formState,
+                [name]: value,
+                ["season"]: players.filter(filterPlayerListDownTo(value))[0].seasons[0]
+            });
+        } else {
+            setFormState({
+                ...formState,
+                [name]: value
+            });
+        }
+    }
+    const [selectedPlayer, setSelectedPlayer] = useState(players[0].firstName + " " + players[0].lastName);
     const [wChecked, setWChecked] = useState(false);
     const [numChecked, setNumChecked] = useState(false);
 
 
     function PlayerDropdownHandler(event) {
         setSelectedPlayer(event.target.value);
-        console.log(players)
-    }
-
-    function AutoHandler(event) {
-        setAutoChecked(!autoChecked)
-    }
-
-    function PatchHandler(event) {
-        setPatchChecked(!patchChecked)
     }
 
     function numberHandler(event) {
@@ -39,7 +55,7 @@ function AddCardForm() {
         <>
             <h1>Add New Card:</h1>
             <Form>
-                <Form.Group className="mb-3">
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="playerName">
                     <Form.Label>Select a Player</Form.Label>
                     <Form.Select value={selectedPlayer} onChange={PlayerDropdownHandler}>
                         {players.map(values => (
@@ -48,33 +64,33 @@ function AddCardForm() {
                         }
                     </Form.Select>
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="season">
                     <Form.Label>Select a Season</Form.Label>
                     <Form.Select>
                         {/* TODO: make dropdown not stay empty if select first player */}
-                        {(selectedPlayer !== "") && players.filter(filterPlayerListDownTo(selectedPlayer))[0].seasons.map(season => (
+                        {players.filter(filterPlayerListDownTo(selectedPlayer))[0].seasons.map(season => (
                             <ListDropdown text={season} />
                         ))
                         }
                     </Form.Select>
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formManu">
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="manufacturer">
                     <Form.Label>Manufacturer</Form.Label>
                     <Form.Control placeholder="probably Panini" />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formSet">
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="set">
                     <Form.Label>Set</Form.Label>
                     <Form.Control placeholder="Enter card's set" />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formParallel">
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="parallel">
                     <Form.Label>Parallel</Form.Label>
                     <Form.Control placeholder="Enter parallel" />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formCardNumber">
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="cardNumber">
                     <Form.Label>Card Number</Form.Label>
                     <Form.Control placeholder="Enter card number" />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formCardNumber">
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="imageLink">
                     <Form.Label>Image Link</Form.Label>
                     <Form.Control placeholder="Enter image link" />
                 </Form.Group>
@@ -82,20 +98,15 @@ function AddCardForm() {
                     <Form.Check inline type="checkbox" label="RC" />
                     <Form.Check inline type="checkbox" label="Sticker" />
                     <Form.Check inline type="checkbox" label="College" />
+                    <Form.Check inline type="checkbox" label="Pre-RC" />
+                    <Form.Check inline type="checkbox" label="Auto" />
+                    <Form.Check inline type="checkbox" label="Patch" />
                     <Form.Check value={wChecked} onChange={wHandler} type="checkbox" label="w/ Others" />
                     {wChecked &&
                         <Form.Control placeholder="who? (comma-separated)" />}
                     <Form.Check value={numChecked} onChange={numberHandler} type="checkbox" label="#'d" />
                     {numChecked &&
                         <Form.Control placeholder="Enter serial number" />}
-                    <Form.Check value={autoChecked} onChange={AutoHandler} type="checkbox" label="Auto" />
-                    {autoChecked && <>
-                        <Form.Check inline name="autogroup" type="radio" label="Sticker Auto" />
-                        <Form.Check inline name="autogroup" type="radio" label="On-Card Auto" /></>}
-                    <Form.Check value={patchChecked} onChange={PatchHandler} type="checkbox" label="Patch" />
-                    {patchChecked && <>
-                        <Form.Check inline name="autogroup" type="radio" label="Game-Worn" />
-                        <Form.Check inline name="autogroup" type="radio" label="Player-Worn" /></>}
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Submit
