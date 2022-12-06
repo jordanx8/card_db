@@ -1,16 +1,27 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net"
 
-	m "github.com/jordanx8/card_db/mongodb"
+	grpc_server "github.com/jordanx8/card_db/grpc_server"
+	pb "github.com/jordanx8/card_db/protos"
+	"google.golang.org/grpc"
 )
 
 func main() {
-	client, err := m.GetMongoClient()
+
+	log.Println("starting up")
+	lis, err := net.Listen("tcp", "0.0.0.0:8080")
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalf("failed to listen: %v", err)
 	}
 
-	fmt.Println(client)
+	s := grpc.NewServer()
+	server := grpc_server.CardServiceServer{}
+	pb.RegisterCardServiceServer(s, &server)
+	log.Printf("server listening at %v", lis.Addr())
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }

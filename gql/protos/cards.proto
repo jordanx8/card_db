@@ -5,11 +5,20 @@ option go_package = "github.com/jordanx8/card_db";
 package main;
 
 service CardService {
-    rpc GetCards(Card) returns (stream Card) {}
-    rpc GetPlayers(Player) returns (stream Player) {}
+    rpc GetCards(Query) returns (stream Card) {}
+    rpc GetPlayers(Empty) returns (stream Player) {}
     rpc AddPlayer(Player) returns (RequestResponse) {}
     rpc AddSeason(Season) returns (RequestResponse) {}
     rpc AddCard(Card) returns (RequestResponse) {}
+}
+
+message Empty {
+
+}
+
+message Query {
+    string tableName = 1;
+    string search = 2;
 }
 
 message Card {
@@ -21,7 +30,7 @@ message Card {
     string parallel = 6;
     string cardNumber = 7;
     repeated string notes = 8;
-    string image = 9;
+    string imageLink = 9;
 }
 
 message Player {

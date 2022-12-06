@@ -13,26 +13,26 @@ const packageDefinition = protoLoader.loadSync(
     includeDirs: ['protos']
   });
 const proto = grpc.loadPackageDefinition(packageDefinition).main;
-const client = new proto.CardService('127.0.0.1:8080', grpc.credentials.createInsecure());
+const client = new proto.CardService('localhost:8080', grpc.credentials.createInsecure());
 
 const typeDefs = gql`
   type Player {
-    firstname: String
-    lastname: String
-    seasonsplayed: String
+    firstName: String
+    lastName: String
+    seasonsPlayed: String
+    seasons: [String]
   }
 
   type Card {
-    FirstName: String
-    LastName: String
-    SeasonsPlayed: String
-    Season: String
-    Manufacturer: String
-    Set: String
-    Insert: String
-    Parallel: String
-    CardNumber: String
-    Notes: String
+    playerName: String
+    season: String
+    manufacturer: String
+    set: String
+    insert: String
+    parallel: String
+    cardNumber: String
+    notes: [String]
+    imageLink: String
   }
 
   type Query {
@@ -41,34 +41,45 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addcard(FirstName: String, LastName: String, SeasonsPlayed: String, Season: String, Manufacturer: String, Set: String, Insert: String, Parallel: String, CardNumber: String, Notes: String): Int
+    AddPlayer(firstName: String, lastName: String, seasonsPlayed: String, seasons: [String]): Boolean
   }
 `;
 
 const resolvers = {
   Query: {
     cards: (parent, args, context, info) => {
-      console.log("cards")
       return new Promise((resolve) => client.GetCards({}, function (err, response) {
         if (err == undefined) {
           resolve(response.cards);
         }
       }));
     },
-    players: (parent, args, context, info) => {
-      return new Promise((resolve) => client.GetPlayers({}, function (err, response) {
-        if (err == undefined) {
-          resolve(response.players);
-        }
-      }));
-    },
+    players: () => {
+      return new Promise((resolve) => {
+        let call = client.GetPlayers({});
+        let players = [];
+        call.on('data', function(player) {
+          players.push(player);
+          return player
+        });
+        call.on('end', function() {
+          resolve(players);
+        });
+      }
+    )},
   },
     Mutation: {
-      addcard: (parent, args, context, info) => {
-        console.log(args)
-        return new Promise((resolve) => client.AddCard({FirstName: args["FirstName"], LastName: args["LastName"], SeasonsPlayed: args["SeasonsPlayed"], Season: args["Season"], Manufacturer: args["Manufacturer"], Set: args["Set"], Insert: args["Insert"], Parallel: args["Parallel"], CardNumber: args["CardNumber"], Notes: args["Notes"]}, function (err, response) {
-          if (err == undefined) {
-            resolve(response.success);
+      AddPlayer: (parent, args, context, info) => {
+        return new Promise((resolve) => client.AddPlayer({
+          firstName: args.firstName, 
+          lastName: args.lastName,
+          seasonsPlayed: args.seasonsPlayed,
+          seasons: args.seasons}, function (err, response) {
+          if (err) {
+            console.log(err)
+            resolve(false)
+          } else {
+            resolve(response.success)
           }
         }));
       },

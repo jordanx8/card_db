@@ -4,6 +4,6 @@ import (
 	pb "github.com/jordanx8/card_db/protos"
 )
 
-type cardServiceServer struct {
+type CardServiceServer struct {
 	pb.UnimplementedCardServiceServer
 }
