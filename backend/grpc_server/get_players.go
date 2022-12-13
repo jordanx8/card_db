@@ -20,7 +20,6 @@ type Player struct {
 
 func (s *CardServiceServer) GetPlayers(empty *pb.Empty, stream pb.CardService_GetPlayersServer) error {
 
-	fmt.Println("getplayers")
 	client, err := m.GetMongoClient()
 	if err != nil {
 		fmt.Println(err)
@@ -37,7 +36,6 @@ func (s *CardServiceServer) GetPlayers(empty *pb.Empty, stream pb.CardService_Ge
 	for cur.Next(context.TODO()) {
 		var elem *pb.Player
 		err := cur.Decode(&elem)
-		fmt.Println(elem)
 		if err != nil {
 			log.Fatal(err)
 		}

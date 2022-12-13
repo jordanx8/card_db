@@ -36,31 +36,40 @@ const typeDefs = gql`
   }
 
   type Query {
-    cards(empty: Int): [Card]
+    cards(tableName: String, search: String): [Card]
     players(empty: Int): [Player]
   }
 
   type Mutation {
-    AddPlayer(firstName: String, lastName: String, seasonsPlayed: String, seasons: [String]): Boolean
+    AddPlayer(firstName: String, lastName: String, seasonsPlayed: String): String
+    AddSeason(firstName: String, lastName: String, season: String): String
+    AddCard(playerName: String, season: String, manufacturer: String, set: String, insert: String, parallel: String, cardNumber: String, notes: [String], imageLink: String, tableName: String): String
   }
 `;
 
 const resolvers = {
   Query: {
     cards: (parent, args, context, info) => {
-      return new Promise((resolve) => client.GetCards({}, function (err, response) {
-        if (err == undefined) {
-          resolve(response.cards);
-        }
-      }));
-    },
+      return new Promise((resolve) => {
+        let call = client.GetCards({
+          tableName: args.tableName,
+          search: args.search
+        });
+        let cards = [];
+        call.on('data', function(card) {
+          cards.push(card);
+        });
+        call.on('end', function() {
+          resolve(cards);
+        });
+      }
+    )},
     players: () => {
       return new Promise((resolve) => {
         let call = client.GetPlayers({});
         let players = [];
         call.on('data', function(player) {
           players.push(player);
-          return player
         });
         call.on('end', function() {
           resolve(players);
@@ -73,13 +82,43 @@ const resolvers = {
         return new Promise((resolve) => client.AddPlayer({
           firstName: args.firstName, 
           lastName: args.lastName,
-          seasonsPlayed: args.seasonsPlayed,
-          seasons: args.seasons}, function (err, response) {
+          seasonsPlayed: args.seasonsPlayed}, function (err, response) {
           if (err) {
-            console.log(err)
-            resolve(false)
+            resolve(err.details)
           } else {
-            resolve(response.success)
+            resolve(response.response)
+          }
+        }));
+      },
+      AddSeason: (parent, args, context, info) => {
+        return new Promise((resolve) => client.AddSeason({
+          firstName: args.firstName, 
+          lastName: args.lastName,
+          season: args.season}, function (err, response) {
+          if (err) {
+            resolve(err.details)
+          } else {
+            resolve(response.response)
+          }
+        }));
+      },
+      AddCard: (parent, args, context, info) => {
+        console.log(args)
+        return new Promise((resolve) => client.AddCard({
+          playerName: args.playerName, 
+          season: args.season,
+          manufacturer: args.manufacturer,         
+          set: args.set, 
+          insert: args.insert,
+          parallel: args.parallel,          
+          cardNumber: args.cardNumber, 
+          notes: args.notes,
+          imageLink: args.imageLink,
+          tableName: args.tableName}, function (err, response) {
+          if (err) {
+            resolve(err.details)
+          } else {
+            resolve(response.response)
           }
         }));
       },

@@ -24,9 +24,9 @@ const _ = grpc.SupportPackageIsVersion7
 type CardServiceClient interface {
 	GetCards(ctx context.Context, in *Query, opts ...grpc.CallOption) (CardService_GetCardsClient, error)
 	GetPlayers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (CardService_GetPlayersClient, error)
-	AddPlayer(ctx context.Context, in *Player, opts ...grpc.CallOption) (*RequestResponse, error)
-	AddSeason(ctx context.Context, in *Season, opts ...grpc.CallOption) (*RequestResponse, error)
-	AddCard(ctx context.Context, in *Card, opts ...grpc.CallOption) (*RequestResponse, error)
+	AddPlayer(ctx context.Context, in *PlayerRequest, opts ...grpc.CallOption) (*Response, error)
+	AddSeason(ctx context.Context, in *SeasonRequest, opts ...grpc.CallOption) (*Response, error)
+	AddCard(ctx context.Context, in *CardRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
 type cardServiceClient struct {
@@ -101,8 +101,8 @@ func (x *cardServiceGetPlayersClient) Recv() (*Player, error) {
 	return m, nil
 }
 
-func (c *cardServiceClient) AddPlayer(ctx context.Context, in *Player, opts ...grpc.CallOption) (*RequestResponse, error) {
-	out := new(RequestResponse)
+func (c *cardServiceClient) AddPlayer(ctx context.Context, in *PlayerRequest, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/main.CardService/AddPlayer", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -110,8 +110,8 @@ func (c *cardServiceClient) AddPlayer(ctx context.Context, in *Player, opts ...g
 	return out, nil
 }
 
-func (c *cardServiceClient) AddSeason(ctx context.Context, in *Season, opts ...grpc.CallOption) (*RequestResponse, error) {
-	out := new(RequestResponse)
+func (c *cardServiceClient) AddSeason(ctx context.Context, in *SeasonRequest, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/main.CardService/AddSeason", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -119,8 +119,8 @@ func (c *cardServiceClient) AddSeason(ctx context.Context, in *Season, opts ...g
 	return out, nil
 }
 
-func (c *cardServiceClient) AddCard(ctx context.Context, in *Card, opts ...grpc.CallOption) (*RequestResponse, error) {
-	out := new(RequestResponse)
+func (c *cardServiceClient) AddCard(ctx context.Context, in *CardRequest, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/main.CardService/AddCard", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -134,9 +134,9 @@ func (c *cardServiceClient) AddCard(ctx context.Context, in *Card, opts ...grpc.
 type CardServiceServer interface {
 	GetCards(*Query, CardService_GetCardsServer) error
 	GetPlayers(*Empty, CardService_GetPlayersServer) error
-	AddPlayer(context.Context, *Player) (*RequestResponse, error)
-	AddSeason(context.Context, *Season) (*RequestResponse, error)
-	AddCard(context.Context, *Card) (*RequestResponse, error)
+	AddPlayer(context.Context, *PlayerRequest) (*Response, error)
+	AddSeason(context.Context, *SeasonRequest) (*Response, error)
+	AddCard(context.Context, *CardRequest) (*Response, error)
 	mustEmbedUnimplementedCardServiceServer()
 }
 
@@ -150,13 +150,13 @@ func (UnimplementedCardServiceServer) GetCards(*Query, CardService_GetCardsServe
 func (UnimplementedCardServiceServer) GetPlayers(*Empty, CardService_GetPlayersServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetPlayers not implemented")
 }
-func (UnimplementedCardServiceServer) AddPlayer(context.Context, *Player) (*RequestResponse, error) {
+func (UnimplementedCardServiceServer) AddPlayer(context.Context, *PlayerRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddPlayer not implemented")
 }
-func (UnimplementedCardServiceServer) AddSeason(context.Context, *Season) (*RequestResponse, error) {
+func (UnimplementedCardServiceServer) AddSeason(context.Context, *SeasonRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddSeason not implemented")
 }
-func (UnimplementedCardServiceServer) AddCard(context.Context, *Card) (*RequestResponse, error) {
+func (UnimplementedCardServiceServer) AddCard(context.Context, *CardRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddCard not implemented")
 }
 func (UnimplementedCardServiceServer) mustEmbedUnimplementedCardServiceServer() {}
@@ -215,7 +215,7 @@ func (x *cardServiceGetPlayersServer) Send(m *Player) error {
 }
 
 func _CardService_AddPlayer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Player)
+	in := new(PlayerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -227,13 +227,13 @@ func _CardService_AddPlayer_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/main.CardService/AddPlayer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CardServiceServer).AddPlayer(ctx, req.(*Player))
+		return srv.(CardServiceServer).AddPlayer(ctx, req.(*PlayerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CardService_AddSeason_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Season)
+	in := new(SeasonRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -245,13 +245,13 @@ func _CardService_AddSeason_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/main.CardService/AddSeason",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CardServiceServer).AddSeason(ctx, req.(*Season))
+		return srv.(CardServiceServer).AddSeason(ctx, req.(*SeasonRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CardService_AddCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Card)
+	in := new(CardRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -263,7 +263,7 @@ func _CardService_AddCard_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/main.CardService/AddCard",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CardServiceServer).AddCard(ctx, req.(*Card))
+		return srv.(CardServiceServer).AddCard(ctx, req.(*CardRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

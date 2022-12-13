@@ -7,9 +7,9 @@ package main;
 service CardService {
     rpc GetCards(Query) returns (stream Card) {}
     rpc GetPlayers(Empty) returns (stream Player) {}
-    rpc AddPlayer(Player) returns (RequestResponse) {}
-    rpc AddSeason(Season) returns (RequestResponse) {}
-    rpc AddCard(Card) returns (RequestResponse) {}
+    rpc AddPlayer(PlayerRequest) returns (Response) {}
+    rpc AddSeason(SeasonRequest) returns (Response) {}
+    rpc AddCard(CardRequest) returns (Response) {}
 }
 
 message Empty {
@@ -40,10 +40,31 @@ message Player {
     repeated string seasons = 4;
 }
 
-message Season {
-    string season = 1;
+message CardRequest {
+    string playerName = 1;
+    string season = 2;
+    string manufacturer = 3;
+    string set = 4;
+    string insert = 5;
+    string parallel = 6;
+    string cardNumber = 7;
+    repeated string notes = 8;
+    string imageLink = 9;
+    string tableName = 10;
 }
 
-message RequestResponse {
-    bool success = 1;
+message PlayerRequest {
+    string firstName = 1;
+    string lastName = 2;
+    string seasonsPlayed = 3;
+}
+
+message SeasonRequest {
+    string season = 1;
+    string firstName = 2;
+    string lastName = 3;
+}
+
+message Response {
+    string response = 1;
 }
