@@ -103,7 +103,6 @@ const resolvers = {
         }));
       },
       AddCard: (parent, args, context, info) => {
-        console.log(args)
         return new Promise((resolve) => client.AddCard({
           playerName: args.playerName, 
           season: args.season,

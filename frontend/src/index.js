@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import CardTable from './components/CardTable';
 import Navigation from './components/Navigation';
 import NotFound from './components/NotFound';
@@ -11,6 +12,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AddPlayerForm from './components/EditComponents/AddPlayerForm';
 import AddSeasonForm from './components/EditComponents/AddSeasonForm';
 import AddCardForm from './components/EditComponents/AddCardForm';
+
+const client = new ApolloClient({
+  uri: "http://localhost:4000/",
+  cache: new InMemoryCache()
+});
 
 const router = createBrowserRouter([
   {
@@ -46,6 +52,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ApolloProvider client={client}>
+      <RouterProvider router={router} />
+    </ApolloProvider>
   </React.StrictMode>
 );

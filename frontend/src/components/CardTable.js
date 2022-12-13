@@ -4,18 +4,27 @@ import Table from 'react-bootstrap/Table';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FilterButton from './FilterButton';
 import SearchBar from './SearchBar';
+import { useQuery } from "@apollo/client";
 import { nameToFilter } from '../util/util';
+import { GET_PLAYERS_QUERY, GET_CARDS_QUERY } from '../util/queries';
 import * as playerData from '../test_player_data.json';
 import * as cardData from '../test_card_data.json';
 
 function CardTable({ tableName }) {
-  const [cards, setCards] = useState(cardData.default);
-  const [players, setPlayers] = useState(playerData.default);
+  const { data: playersData, loading: playersLoading, error: playersError } = useQuery(GET_PLAYERS_QUERY);
+  const { data: cardsData, loading: cardsLoading, error: cardsError } = useQuery(GET_CARDS_QUERY, {
+    variables:{ tableName: "Pelicans"},
+  });
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPlayers, setCurrentPlayers] = useState(false);
   const [rookieCards, setRookieCards] = useState(false);
   const [autograph, setAutograph] = useState(false);
   const [patch, setPatch] = useState(false);
+
+  if (playersLoading || cardsLoading) return "Loading...";
+  if (playersError) return <pre>{playersError.message}</pre>
+  if (cardsError) return <pre>{cardsError.message}</pre>
 
   return (
     <>
@@ -39,8 +48,8 @@ function CardTable({ tableName }) {
           </tr>
         </thead>
         <tbody>
-          {players.map(values => (
-            <PlayerRow firstName={values.firstName} lastName={values.lastName} seasonsPlayed={values.seasonsPlayed} seasons={values.seasons} cardData={cards.filter(nameToFilter((values.firstName + " " + values.lastName)))} />
+          {playersData.players.map(values => (
+            <PlayerRow firstName={values.firstName} lastName={values.lastName} seasonsPlayed={values.seasonsPlayed} seasons={values.seasons} cardData={cardsData.cards.filter(nameToFilter((values.firstName + " " + values.lastName)))} />
           ))
           }
         </tbody>
