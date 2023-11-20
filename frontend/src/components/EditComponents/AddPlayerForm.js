@@ -2,12 +2,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import React, { useState } from 'react';
 import { ADD_PLAYER_MUTATION } from '../../util/mutations';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function AddPlayerForm() {
-    const [addPlayer, {data, loading, error}] = useMutation(ADD_PLAYER_MUTATION);
+    const [addPlayer, { data, loading, error }] = useMutation(ADD_PLAYER_MUTATION);
 
 
     const [formState, setFormState] = useState({
@@ -23,12 +23,13 @@ function AddPlayerForm() {
             ...formState,
             [name]: value
         });
+        console.log(formState)
     }
 
     async function handleSubmit() {
         const id = toast.loading("Adding player...")
-        const {data} = await addPlayer({ variables: { firstName: formState.formFirstName, lastName: formState.formLastName, seasonsPlayed: formState.formSeasonsPlayed } })
-        toast.update(id, {render: data.AddPlayer, type:"success", isLoading: false, autoClose: 5000, closeOnClick: true, draggable: true})
+        const { data } = await addPlayer({ variables: { firstName: formState.formFirstName, lastName: formState.formLastName, seasonsPlayed: formState.formSeasonsPlayed } })
+        toast.update(id, { render: data.AddPlayer, type: "success", isLoading: false, autoClose: 5000, closeOnClick: true, draggable: true })
     }
 
     return (

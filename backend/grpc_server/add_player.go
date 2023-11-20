@@ -11,7 +11,8 @@ import (
 )
 
 func (s *CardServiceServer) AddPlayer(c context.Context, p *card_db.PlayerRequest) (*card_db.Response, error) {
-
+	log.Println("Running AddPlayer() w/ request:")
+	log.Println(p)
 	client, err := m.GetMongoClient()
 	if err != nil {
 		log.Fatal(err)

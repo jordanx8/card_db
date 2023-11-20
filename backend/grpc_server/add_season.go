@@ -12,7 +12,8 @@ import (
 )
 
 func (s *CardServiceServer) AddSeason(c context.Context, r *card_db.SeasonRequest) (*card_db.Response, error) {
-
+	log.Println("Running AddSeason()) w/ request:")
+	log.Println(r)
 	client, err := m.GetMongoClient()
 	if err != nil {
 		log.Fatal(err)
@@ -35,7 +36,7 @@ func (s *CardServiceServer) AddSeason(c context.Context, r *card_db.SeasonReques
 	)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return &card_db.Response{Response: "Player does not exist"}, errors.New("Player does not exist.")
+			return &card_db.Response{Response: "Player does not exist"}, errors.New("Player does not exist")
 		}
 		log.Fatal(err)
 		return &card_db.Response{Response: err.Error()}, err

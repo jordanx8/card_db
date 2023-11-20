@@ -1,6 +1,6 @@
 function NotFound(){
     return(
-        <h1>ERORR: Not Found</h1>
+        <h1>ERROR: Not Found</h1>
     )
 }
 

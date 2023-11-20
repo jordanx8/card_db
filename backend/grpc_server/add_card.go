@@ -11,7 +11,8 @@ import (
 )
 
 func (s *CardServiceServer) AddCard(c context.Context, p *card_db.CardRequest) (*card_db.Response, error) {
-
+	log.Println("Running AddCard() w/ request:")
+	log.Println(p)
 	client, err := m.GetMongoClient()
 	if err != nil {
 		log.Fatal(err)
@@ -32,7 +33,7 @@ func (s *CardServiceServer) AddCard(c context.Context, p *card_db.CardRequest) (
 
 	collection := client.Database("card_db").Collection(p.GetTableName())
 
-	//check if player exists already
+	//check if card exists already
 	count, err := collection.CountDocuments(
 		context.TODO(),
 		bson.D{
