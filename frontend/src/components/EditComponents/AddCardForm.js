@@ -2,30 +2,47 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import React, { useState } from 'react';
 import ListDropdown from './ListDropdown';
-import * as playerData from '../../test_player_data.json';
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_PLAYERS_QUERY } from '../../util/queries';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { filterPlayerListDownTo } from '../../util/util'
 
 function AddCardForm() {
-    const [players, setPlayers] = useState(playerData.default);
     const [formState, setFormState] = useState({
-        playerName: players[0].firstName + " " + players[0].lastName,
-        season: players[0].seasons[0],
+        firstName: "",
+        lastName: "",
+        season: "",
         manufacturer: "",
         set: "",
         parallel: "",
         cardNumber: "",
         imageLink: "",
     });
-    function handleInputChange(event) {
-        console.log(formState)
-        const value = event.target.value
-        const name = event.target.id
-        if(name === "playerName")
-        {
+
+    const { data: playersData, loading: playersLoading, error: playersError } = useQuery(GET_PLAYERS_QUERY, {
+        onCompleted: (data) => {
+            console.log(data)
+            setSelectedPlayer(data.players[0].firstName + " " + data.players[0].lastName)
             setFormState({
                 ...formState,
-                [name]: value,
-                ["season"]: players.filter(filterPlayerListDownTo(value))[0].seasons[0]
+                "firstName": data.players[0].firstName,
+                "lastName": data.players[0].lastName,
+                "season": data.players[0].seasons[0],
+            });
+        }
+    });
+
+    function handleInputChange(event) {
+        const value = event.target.value
+        const name = event.target.id
+        if (name === "playerName") {
+            const names = value.split(" ");
+            setFormState({
+                ...formState,
+                "firstName": names[0],
+                "lastName": names[1],
+                "season": playersData.players.filter(filterPlayerListDownTo(value))[0].seasons[0]
             });
         } else {
             setFormState({
@@ -34,7 +51,7 @@ function AddCardForm() {
             });
         }
     }
-    const [selectedPlayer, setSelectedPlayer] = useState(players[0].firstName + " " + players[0].lastName);
+    const [selectedPlayer, setSelectedPlayer] = useState("");
     const [wChecked, setWChecked] = useState(false);
     const [numChecked, setNumChecked] = useState(false);
 
@@ -51,14 +68,23 @@ function AddCardForm() {
         setWChecked(!wChecked)
     }
 
+    if (playersLoading) return "Loading...";
+    if (playersError) return <pre>{playersError.message}</pre>
+
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                draggable
+                autoClose={5000}
+                closeOnClick
+            />
             <h1>Add New Card:</h1>
             <Form>
                 <Form.Group onChange={handleInputChange} className="mb-3" controlId="playerName">
                     <Form.Label>Select a Player</Form.Label>
                     <Form.Select value={selectedPlayer} onChange={PlayerDropdownHandler}>
-                        {players.map(values => (
+                        {playersData.players.map(values => (
                             <ListDropdown text={values.firstName + " " + values.lastName} />
                         ))
                         }
@@ -68,7 +94,7 @@ function AddCardForm() {
                     <Form.Label>Select a Season</Form.Label>
                     <Form.Select>
                         {/* TODO: make dropdown not stay empty if select first player */}
-                        {players.filter(filterPlayerListDownTo(selectedPlayer))[0].seasons.map(season => (
+                        {playersData.players.filter(filterPlayerListDownTo(selectedPlayer))[0].seasons.map(season => (
                             <ListDropdown text={season} />
                         ))
                         }
