@@ -3,26 +3,49 @@ package main
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 
-	// importing Colly
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
 )
 
+type Player struct {
+	FirstName string
+	LastName  string
+}
+
 type Listing struct {
 	Title   string
-	Price   string
+	Price   float64
 	Details map[string]string
 }
 
-var listings []Listing
+type CardSearch struct {
+	Year     string
+	Player   Player
+	Parallel string
+	Set      string
+	Team     string
+	Insert   string
+	CardNo   string
+}
 
 func hasStrikethrough(s string) bool {
 	return strings.Contains(s, "STRIKETHROUGH")
 }
 
-func main() {
+func convertPriceToFloat(price string) float64 {
+	price = strings.Replace(price, "US $", "", -1)
+	if s, err := strconv.ParseFloat(price, 64); err == nil {
+		return s
+	}
+	return 0
+}
+
+func scrapeCompletedListings(ebayUrl string) []Listing {
+	var listings []Listing
+
 	c := colly.NewCollector(
 		colly.AllowedDomains("ebay.com", "www.ebay.com"),
 	)
@@ -52,19 +75,119 @@ func main() {
 			})
 			l := Listing{
 				Title:   title,
-				Price:   price,
+				Price:   convertPriceToFloat(price),
 				Details: deets,
 			}
 			listings = append(listings, l)
 		}
 	})
 
-	err := c.Visit("https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=2022-23+Mosaic+Thunder+Road+%2312+Stephen+Curry+Warriors+Insert&_sacat=0&LH_TitleDesc=0&_fsrp=1&rt=nc&Player%252FAthlete=Stephen%2520Curry&LH_Complete=1&LH_Sold=1&Sport=Basketball&_odkw=2022-23+Mosaic+Thunder+Road+%2312+Stephen+Curry+Warriors+Insert+base&_osacat=0&_dcat=261328&Team=Golden%2520State%2520Warriors&Features=Insert")
+	err := c.Visit(ebayUrl)
 	if err != nil {
 		log.Printf("failed to visit url: %v\n", err)
-		return
+		return nil
 	}
 
-	fmt.Println(listings)
-	fmt.Println(len(listings))
+	return listings
+}
+
+func createEbayURL(cs CardSearch) string {
+	s := cs.Year + " " + cs.Set + " "
+	if cs.Insert != "" {
+		s = s + cs.Insert + " Insert "
+	}
+	s = s + "#" + cs.CardNo + " " + cs.Player.FirstName + " " + cs.Player.LastName + " " + cs.Team
+	urlStart := "https://www.ebay.com/sch/i.html?_from=R40&_nkw="
+	urlEnd := "&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1"
+	s = strings.Replace(s, " ", "+", -1)
+	s = strings.Replace(s, "#", "%23", -1)
+	return urlStart + s + urlEnd
+}
+
+func validationsNeeded(cs CardSearch) []func(Listing, CardSearch) bool {
+	var validations []func(Listing, CardSearch) bool
+	validations = append(validations, playerNameAndYearValidation, setValidation)
+	if cs.Insert != "" {
+		validations = append(validations, insertValidation)
+	}
+	if cs.Parallel == "Base" {
+		validations = append(validations, baseValidation)
+	} else {
+		validations = append(validations, parallelValidation)
+	}
+	return validations
+}
+
+func filterListings(listings []Listing, cs CardSearch) []Listing {
+	var filteredListings []Listing
+	var validations = validationsNeeded(cs)
+ListingLoop:
+	for _, listing := range listings {
+		for _, validation := range validations {
+			if !validation(listing, cs) {
+				continue ListingLoop
+			}
+		}
+		filteredListings = append(filteredListings, listing)
+
+	}
+	return filteredListings
+}
+
+func createSearch(year string, playerName string, set string, team string, parallel string, insert string, cardno string) CardSearch {
+	name := strings.Split(playerName, " ")
+	return CardSearch{
+		Year: year,
+		Player: Player{
+			FirstName: name[0],
+			LastName:  name[1],
+		},
+		Parallel: parallel,
+		Set:      set,
+		Team:     team,
+		Insert:   insert,
+		CardNo:   cardno,
+	}
+}
+
+func main() {
+	cardParameters := createSearch(
+		"2022-23",
+		"Stephen Curry",
+		"Panini Mosaic",
+		"Golden State Warriors",
+		"Base",
+		"Thunder Road",
+		"12",
+	)
+	searchURL := createEbayURL(cardParameters)
+	fmt.Println(searchURL)
+	listings := scrapeCompletedListings(searchURL)
+	filtered := filterListings(listings, cardParameters)
+	sum := 0.0
+	for _, v := range filtered {
+		sum += v.Price
+	}
+	fmt.Println(sum, len(filtered))
+	fmt.Println(sum / float64(len(filtered)))
+
+	// // write to csv for testing
+	// csvFile, err := os.Create("listings2.csv")
+	// if err != nil {
+	// 	log.Fatalf("failed creating file: %s", err)
+	// }
+	// defer csvFile.Close()
+
+	// w := csv.NewWriter(csvFile)
+	// defer w.Flush()
+
+	// for _, listing := range filtered {
+	// 	row := []string{listing.Title, strconv.FormatFloat(listing.Price, 'f', -1, 64)}
+	// 	for k, v := range listing.Details {
+	// 		row = append(row, k+": "+v)
+	// 	}
+	// 	if err := w.Write(row); err != nil {
+	// 		log.Fatalln("error writing record to file", err)
+	// 	}
+	// }
 }
