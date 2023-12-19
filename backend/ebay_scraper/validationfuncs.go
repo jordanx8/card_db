@@ -56,18 +56,31 @@ func baseValidation(l Listing, cs CardSearch) bool {
 }
 
 func parallelValidation(l Listing, cs CardSearch) bool {
-	wordsToFilterOut := []string{"Prizm"}
+	wordsToFilterOut := []string{"Prizm", "Mosaic", "Mojo"}
 	parallelStringSplit := strings.Split(cs.Parallel, " ")
 	parallelStringArray := filterOutOfArray(parallelStringSplit, wordsToFilterOut)
-	title := strings.ToLower(l.Title)
+	filteredTitle := strings.Replace(l.Title, cs.Set, "", -1)
+	title := strings.ToLower(filteredTitle)
 
 	for _, val := range parallelStringArray {
+		// looking for color/other descriptors here
 		if !strings.Contains(title, strings.ToLower(val)) {
 			return false
 		}
 	}
 
-	return false
+	for _, val := range parallelStringSplit {
+		title = strings.Replace(filteredTitle, val, "", -1)
+	}
+
+	title = strings.ToLower(title)
+	for _, val := range wordsToFilterOut {
+		if strings.Contains(title, strings.ToLower(val)) {
+			return false
+		}
+	}
+
+	return true
 }
 
 func checkDetails(l Listing, detail string, comparison string) bool {

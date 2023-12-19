@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 
@@ -153,41 +155,58 @@ func createSearch(year string, playerName string, set string, team string, paral
 func main() {
 	cardParameters := createSearch(
 		"2022-23",
-		"Stephen Curry",
-		"Panini Mosaic",
-		"Golden State Warriors",
-		"Base",
-		"Thunder Road",
-		"12",
+		"Matt Ryan",
+		"Panini Instant",
+		"Los Angeles Lakers",
+		"",
+		"",
+		"24",
 	)
 	searchURL := createEbayURL(cardParameters)
 	fmt.Println(searchURL)
 	listings := scrapeCompletedListings(searchURL)
 	filtered := filterListings(listings, cardParameters)
-	sum := 0.0
-	for _, v := range filtered {
-		sum += v.Price
+	fmt.Println(cardParameters)
+	fmt.Println("--------------------------------")
+	if len(filtered) == 0 {
+		fmt.Println("No recent purchases.")
+	} else {
+		sum := 0.0
+		high := filtered[0].Price
+		low := filtered[0].Price
+		for _, v := range filtered {
+			if v.Price < low {
+				low = v.Price
+			}
+			if v.Price > high {
+				high = v.Price
+			}
+			sum += v.Price
+		}
+		fmt.Println("# of Listings: ", len(filtered))
+		fmt.Println("Total: ", sum)
+		fmt.Println("Average: ", sum/float64(len(filtered)))
+		fmt.Println("High: ", high)
+		fmt.Println("Low: ", low)
 	}
-	fmt.Println(sum, len(filtered))
-	fmt.Println(sum / float64(len(filtered)))
 
-	// // write to csv for testing
-	// csvFile, err := os.Create("listings2.csv")
-	// if err != nil {
-	// 	log.Fatalf("failed creating file: %s", err)
-	// }
-	// defer csvFile.Close()
+	// write to csv for testing
+	csvFile, err := os.Create("listings2.csv")
+	if err != nil {
+		log.Fatalf("failed creating file: %s", err)
+	}
+	defer csvFile.Close()
 
-	// w := csv.NewWriter(csvFile)
-	// defer w.Flush()
+	w := csv.NewWriter(csvFile)
+	defer w.Flush()
 
-	// for _, listing := range filtered {
-	// 	row := []string{listing.Title, strconv.FormatFloat(listing.Price, 'f', -1, 64)}
-	// 	for k, v := range listing.Details {
-	// 		row = append(row, k+": "+v)
-	// 	}
-	// 	if err := w.Write(row); err != nil {
-	// 		log.Fatalln("error writing record to file", err)
-	// 	}
-	// }
+	for _, listing := range filtered {
+		row := []string{listing.Title, strconv.FormatFloat(listing.Price, 'f', -1, 64)}
+		for k, v := range listing.Details {
+			row = append(row, k+": "+v)
+		}
+		if err := w.Write(row); err != nil {
+			log.Fatalln("error writing record to file", err)
+		}
+	}
 }
