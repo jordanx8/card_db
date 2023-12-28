@@ -11,11 +11,16 @@ import * as playerData from '../test_player_data.json';
 import * as cardData from '../test_card_data.json';
 
 function CardTable({ tableName }) {
+  const [cardData, setCardData] = useState([]);
   const { data: playersData, loading: playersLoading, error: playersError } = useQuery(GET_PLAYERS_QUERY);
   const { data: cardsData, loading: cardsLoading, error: cardsError } = useQuery(GET_CARDS_QUERY, {
-    variables:{ tableName: "Pelicans"},
+    variables: { tableName: "Pelicans" },
+    onCompleted: (data) => {
+      console.log(data.cards)
+      setCardData(data.cards)
+    }
   });
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPlayers, setCurrentPlayers] = useState(false);
   const [rookieCards, setRookieCards] = useState(false);
@@ -30,8 +35,8 @@ function CardTable({ tableName }) {
     <>
       <h1>{tableName}</h1>
       <InputGroup className="mb-3">
-        {/* TODO: Get Search Bar to actually work */}
-        <SearchBar state={searchTerm} setState={setSearchTerm} />
+        {/* TODO: Filter Buttons to work */}
+        <SearchBar state={searchTerm} setState={setSearchTerm} allCards={cardsData.cards} cardState={cardData} setCardState={setCardData}/>
         <FilterButton name={"Current Players"} state={currentPlayers} setState={setCurrentPlayers} />
         <FilterButton name={"RC"} state={rookieCards} setState={setRookieCards} />
         <FilterButton name={"Auto"} state={autograph} setState={setAutograph} />
@@ -50,7 +55,7 @@ function CardTable({ tableName }) {
         </thead>
         <tbody>
           {playersData.players.map(values => (
-            <PlayerRow firstName={values.firstName} lastName={values.lastName} seasonsPlayed={values.seasonsPlayed} seasons={values.seasons} cardData={cardsData.cards.filter(nameToFilter((values.firstName + " " + values.lastName)))} />
+            <PlayerRow firstName={values.firstName} lastName={values.lastName} seasonsPlayed={values.seasonsPlayed} seasons={values.seasons} cardData={cardData.filter(nameToFilter((values.firstName + " " + values.lastName)))} />
           ))
           }
         </tbody>
