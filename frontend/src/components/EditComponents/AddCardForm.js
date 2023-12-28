@@ -53,10 +53,16 @@ function AddCardForm() {
                 });
             }
         } else {
-        setFormState({
-            ...formState,
-            [name]: value
-        });
+            if (name === "playerName") {
+                setFormState({
+                    ...formState,
+                    "season": playersData.players.filter(filterPlayerListDownTo(value))[0].seasons[0]
+                });
+            }
+            setFormState({
+                ...formState,
+                [name]: value
+            });
         }
         console.log(formState)
     }
@@ -78,17 +84,20 @@ function AddCardForm() {
     }
 
     async function handleSubmit() {
-        // console.log(formState)
         const id = toast.loading("Adding card...")
-        const { data } = await addCard({ variables: { playerName: formState.playerName, 
-            season: formState.season, 
-            manufacturer: formState.manufacturer, 
-            set: formState.set, 
-            parallel: formState.parallel,
-            cardNumber: formState.cardNumber,
-            imageLink: formState.imageLink,
-            tableName: formState.tableName,
-            notes: formState.notes}})
+        const { data } = await addCard({
+            variables: {
+                playerName: formState.playerName,
+                season: formState.season,
+                manufacturer: formState.manufacturer,
+                set: formState.set,
+                parallel: formState.parallel,
+                cardNumber: formState.cardNumber,
+                imageLink: formState.imageLink,
+                tableName: formState.tableName,
+                notes: formState.notes
+            }
+        })
         toast.update(id, { render: data.AddCard, type: "success", isLoading: false, autoClose: 5000, closeOnClick: true, draggable: true })
     }
 
@@ -108,7 +117,7 @@ function AddCardForm() {
                 <Form.Group onChange={handleInputChange} className="mb-3" controlId="playerName">
                     <Form.Label>Select a Player</Form.Label>
                     <Form.Select value={selectedPlayer} onChange={PlayerDropdownHandler}>
-                        {playersData.players.map(values => (
+                        {playersData.players.filter(x => x.seasons.length !== 0).map(values => (
                             <ListDropdown text={values.firstName + " " + values.lastName} />
                         ))
                         }
@@ -117,7 +126,6 @@ function AddCardForm() {
                 <Form.Group onChange={handleInputChange} className="mb-3" controlId="season">
                     <Form.Label>Select a Season</Form.Label>
                     <Form.Select>
-                        {/* TODO: make dropdown not stay empty if select first player */}
                         {playersData.players.filter(filterPlayerListDownTo(selectedPlayer))[0].seasons.map(season => (
                             <ListDropdown text={season} />
                         ))
@@ -145,14 +153,14 @@ function AddCardForm() {
                     <Form.Control placeholder="Enter image link" />
                 </Form.Group>
                 <Form.Group onChange={handleInputChange} className="mb-3" controlId="formNotes">
-                    <Form.Check inline type="checkbox" label="RC" controlId="RC"/>
-                    <Form.Check inline type="checkbox" label="Sticker" controlId="Sticker"/>
-                    <Form.Check inline type="checkbox" label="College" controlId="College"/>
-                    <Form.Check inline type="checkbox" label="Pre-RC" controlId="Pre-RC"/>
-                    <Form.Check inline type="checkbox" label="Auto" controlId="Auto"/>
-                    <Form.Check inline type="checkbox" label="Patch" controlId="Patch"/>
+                    <Form.Check inline type="checkbox" label="RC" controlId="RC" />
+                    <Form.Check inline type="checkbox" label="Sticker" controlId="Sticker" />
+                    <Form.Check inline type="checkbox" label="College" controlId="College" />
+                    <Form.Check inline type="checkbox" label="Pre-RC" controlId="Pre-RC" />
+                    <Form.Check inline type="checkbox" label="Auto" controlId="Auto" />
+                    <Form.Check inline type="checkbox" label="Patch" controlId="Patch" />
                     {/* TODO: Get the below forms thangs to work */}
-                    <Form.Check value={wChecked} onChange={wHandler} type="checkbox" label="w/ Others" controlId="w/ Others"/>
+                    <Form.Check value={wChecked} onChange={wHandler} type="checkbox" label="w/ Others" controlId="w/ Others" />
                     {wChecked &&
                         <Form.Control placeholder="who? (comma-separated)" />}
                     <Form.Check value={numChecked} onChange={numberHandler} type="checkbox" label="#'d" />
