@@ -30,7 +30,7 @@ function SeasonRow({ season, cardData }) {
                                 parallel={card.parallel}
                                 cardNumber={card.cardNumber}
                                 notes={card.notes}
-                                image={card.image}
+                                image={card.imageLink}
                             />
                         ))
                         }

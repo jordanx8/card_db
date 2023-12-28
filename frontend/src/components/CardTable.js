@@ -30,6 +30,7 @@ function CardTable({ tableName }) {
     <>
       <h1>{tableName}</h1>
       <InputGroup className="mb-3">
+        {/* TODO: Get Search Bar to actually work */}
         <SearchBar state={searchTerm} setState={setSearchTerm} />
         <FilterButton name={"Current Players"} state={currentPlayers} setState={setCurrentPlayers} />
         <FilterButton name={"RC"} state={rookieCards} setState={setRookieCards} />
