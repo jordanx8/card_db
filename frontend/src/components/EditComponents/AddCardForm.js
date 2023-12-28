@@ -7,49 +7,58 @@ import { GET_PLAYERS_QUERY } from '../../util/queries';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { filterPlayerListDownTo } from '../../util/util'
+import { ADD_CARD_MUTATION } from '../../util/mutations';
 
 function AddCardForm() {
     const [formState, setFormState] = useState({
-        firstName: "",
-        lastName: "",
+        playerName: "",
         season: "",
         manufacturer: "",
         set: "",
         parallel: "",
         cardNumber: "",
         imageLink: "",
+        tableName: "Pelicans",
+        notes: []
     });
 
     const { data: playersData, loading: playersLoading, error: playersError } = useQuery(GET_PLAYERS_QUERY, {
         onCompleted: (data) => {
-            console.log(data)
             setSelectedPlayer(data.players[0].firstName + " " + data.players[0].lastName)
             setFormState({
                 ...formState,
-                "firstName": data.players[0].firstName,
-                "lastName": data.players[0].lastName,
+                "playerName": data.players[0].firstName + " " + data.players[0].lastName,
                 "season": data.players[0].seasons[0],
             });
         }
     });
+    const [addCard, { data, loading, error }] = useMutation(ADD_CARD_MUTATION);
 
     function handleInputChange(event) {
         const value = event.target.value
         const name = event.target.id
-        if (name === "playerName") {
-            const names = value.split(" ");
-            setFormState({
-                ...formState,
-                "firstName": names[0],
-                "lastName": names[1],
-                "season": playersData.players.filter(filterPlayerListDownTo(value))[0].seasons[0]
-            });
+        if (name === "formNotes") {
+            console.log(event.target.checked)
+            if (event.target.checked) {
+                let newArray = [...formState.notes, event.target.getAttribute('controlid')]
+                setFormState({
+                    ...formState,
+                    "notes": newArray,
+                });
+            } else {
+                let newArray = formState.notes.filter(x => x !== event.target.getAttribute('controlid'))
+                setFormState({
+                    ...formState,
+                    "notes": newArray,
+                });
+            }
         } else {
-            setFormState({
-                ...formState,
-                [name]: value
-            });
+        setFormState({
+            ...formState,
+            [name]: value
+        });
         }
+        console.log(formState)
     }
     const [selectedPlayer, setSelectedPlayer] = useState("");
     const [wChecked, setWChecked] = useState(false);
@@ -66,6 +75,21 @@ function AddCardForm() {
 
     function wHandler(event) {
         setWChecked(!wChecked)
+    }
+
+    async function handleSubmit() {
+        // console.log(formState)
+        const id = toast.loading("Adding card...")
+        const { data } = await addCard({ variables: { playerName: formState.playerName, 
+            season: formState.season, 
+            manufacturer: formState.manufacturer, 
+            set: formState.set, 
+            parallel: formState.parallel,
+            cardNumber: formState.cardNumber,
+            imageLink: formState.imageLink,
+            tableName: formState.tableName,
+            notes: formState.notes}})
+        toast.update(id, { render: data.AddCard, type: "success", isLoading: false, autoClose: 5000, closeOnClick: true, draggable: true })
     }
 
     if (playersLoading) return "Loading...";
@@ -120,21 +144,22 @@ function AddCardForm() {
                     <Form.Label>Image Link</Form.Label>
                     <Form.Control placeholder="Enter image link" />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formNotes">
-                    <Form.Check inline type="checkbox" label="RC" />
-                    <Form.Check inline type="checkbox" label="Sticker" />
-                    <Form.Check inline type="checkbox" label="College" />
-                    <Form.Check inline type="checkbox" label="Pre-RC" />
-                    <Form.Check inline type="checkbox" label="Auto" />
-                    <Form.Check inline type="checkbox" label="Patch" />
-                    <Form.Check value={wChecked} onChange={wHandler} type="checkbox" label="w/ Others" />
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="formNotes">
+                    <Form.Check inline type="checkbox" label="RC" controlId="RC"/>
+                    <Form.Check inline type="checkbox" label="Sticker" controlId="Sticker"/>
+                    <Form.Check inline type="checkbox" label="College" controlId="College"/>
+                    <Form.Check inline type="checkbox" label="Pre-RC" controlId="Pre-RC"/>
+                    <Form.Check inline type="checkbox" label="Auto" controlId="Auto"/>
+                    <Form.Check inline type="checkbox" label="Patch" controlId="Patch"/>
+                    {/* TODO: Get the below forms thangs to work */}
+                    <Form.Check value={wChecked} onChange={wHandler} type="checkbox" label="w/ Others" controlId="w/ Others"/>
                     {wChecked &&
                         <Form.Control placeholder="who? (comma-separated)" />}
                     <Form.Check value={numChecked} onChange={numberHandler} type="checkbox" label="#'d" />
                     {numChecked &&
                         <Form.Control placeholder="Enter serial number" />}
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" type="button" onClick={handleSubmit}>
                     Submit
                 </Button>
             </Form>

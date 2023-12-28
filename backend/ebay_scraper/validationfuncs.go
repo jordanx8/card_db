@@ -56,6 +56,9 @@ func baseValidation(l Listing, cs CardSearch) bool {
 }
 
 func parallelValidation(l Listing, cs CardSearch) bool {
+	if checkDetails(l, "Parallel/Variety", cs.Parallel) {
+		return true
+	}
 	wordsToFilterOut := []string{"Prizm", "Mosaic", "Mojo"}
 	parallelStringSplit := strings.Split(cs.Parallel, " ")
 	parallelStringArray := filterOutOfArray(parallelStringSplit, wordsToFilterOut)

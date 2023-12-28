@@ -67,6 +67,10 @@ func scrapeCompletedListings(ebayUrl string) []Listing {
 
 			title := e.ChildText("h1.x-item-title__mainTitle")
 			price := e.ChildText("div.x-price-primary")
+			// use approx USD amount if sold amount wasn't in USD
+			if !strings.Contains(price, "US $") {
+				price = strings.Replace(e.ChildText("div.x-price-approx"), "Approximately", "", -1)
+			}
 
 			e.DOM.Find("div.ux-layout-section-evo__col").Each(func(_ int, s *goquery.Selection) {
 				label := s.Find("div.ux-labels-values__labels").Text()
@@ -155,12 +159,12 @@ func createSearch(year string, playerName string, set string, team string, paral
 func main() {
 	cardParameters := createSearch(
 		"2022-23",
-		"Matt Ryan",
-		"Panini Instant",
-		"Los Angeles Lakers",
-		"",
-		"",
-		"24",
+		"Ja Morant",
+		"Panini Flux",
+		"Memphis Grizzlies",
+		"Silver Prizm",
+		"Flux Appeal",
+		"10",
 	)
 	searchURL := createEbayURL(cardParameters)
 	fmt.Println(searchURL)
