@@ -20,6 +20,7 @@ type Cards struct {
 	cardNumber   string
 	notes        []string
 	imageLink    string
+	team         string
 }
 
 func (s *CardServiceServer) GetCards(query *pb.Query, stream pb.CardService_GetCardsServer) error {

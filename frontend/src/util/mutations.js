@@ -13,7 +13,7 @@ export const ADD_SEASON_MUTATION = gql`
 `;
 
 export const ADD_CARD_MUTATION = gql`
-  mutation AddCard($playerName: String, $season: String, $manufacturer: String, $set: String, $insert: String, $parallel: String, $cardNumber: String, $notes: [String], $imageLink: String, $tableName: String) {
-    AddCard(playerName: $playerName, season: $season, manufacturer: $manufacturer, set: $set, insert: $insert, parallel: $parallel, cardNumber: $cardNumber, notes: $notes, imageLink: $imageLink, tableName: $tableName)
+  mutation AddCard($playerName: String, $season: String, $manufacturer: String, $set: String, $insert: String, $parallel: String, $cardNumber: String, $notes: [String], $imageLink: String, $tableName: String, $team: String) {
+    AddCard(playerName: $playerName, season: $season, manufacturer: $manufacturer, set: $set, insert: $insert, parallel: $parallel, cardNumber: $cardNumber, notes: $notes, imageLink: $imageLink, tableName: $tableName, team: $team)
   }
 `;

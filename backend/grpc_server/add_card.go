@@ -29,6 +29,7 @@ func (s *CardServiceServer) AddCard(c context.Context, p *card_db.CardRequest) (
 		{Key: "cardNumber", Value: p.GetCardNumber()},
 		{Key: "notes", Value: p.GetNotes()},
 		{Key: "imageLink", Value: p.GetImageLink()},
+		{Key: "team", Value: p.GetTeam()},
 	}
 
 	collection := client.Database("card_db").Collection(p.GetTableName())
@@ -44,6 +45,7 @@ func (s *CardServiceServer) AddCard(c context.Context, p *card_db.CardRequest) (
 			{Key: "insert", Value: p.GetInsert()},
 			{Key: "parallel", Value: p.GetParallel()},
 			{Key: "cardNumber", Value: p.GetCardNumber()},
+			{Key: "team", Value: p.GetTeam()},
 		},
 	)
 	if count > 0 {

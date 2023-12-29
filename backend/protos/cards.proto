@@ -31,6 +31,7 @@ message Card {
     string cardNumber = 7;
     repeated string notes = 8;
     string imageLink = 9;
+    string team = 10;
 }
 
 message Player {
@@ -51,6 +52,7 @@ message CardRequest {
     repeated string notes = 8;
     string imageLink = 9;
     string tableName = 10;
+    string team = 11;
 }
 
 message PlayerRequest {

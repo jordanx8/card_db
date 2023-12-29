@@ -10,6 +10,8 @@ import { GET_PLAYERS_QUERY, GET_CARDS_QUERY } from '../util/queries';
 import * as playerData from '../test_player_data.json';
 import * as cardData from '../test_card_data.json';
 
+// TODO: maybe autogenerate teams on the season by the cards? or by scraping basketball ref
+
 function CardTable({ tableName }) {
   const [cardData, setCardData] = useState([]);
   const { data: playersData, loading: playersLoading, error: playersError } = useQuery(GET_PLAYERS_QUERY);

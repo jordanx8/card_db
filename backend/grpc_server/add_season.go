@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"strings"
 
 	m "github.com/jordanx8/card_db/mongodb"
 	card_db "github.com/jordanx8/card_db/protos"
@@ -25,7 +26,9 @@ func (s *CardServiceServer) AddSeason(c context.Context, r *card_db.SeasonReques
 		{Key: "lastName", Value: r.GetLastName()},
 	}
 
-	addToArray := bson.D{{Key: "$addToSet", Value: bson.D{{Key: "seasons", Value: r.GetSeason()}}}}
+	seasonsToBeAdded := strings.Split(r.GetSeason(), ",")
+
+	addToArray := bson.D{{Key: "$addToSet", Value: bson.D{{Key: "seasons", Value: bson.M{"$each": seasonsToBeAdded}}}}}
 
 	collection := client.Database("card_db").Collection("players")
 

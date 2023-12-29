@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.17.3
-// source: protos/cards.proto
+// source: cards.proto
 
 package card_db
 
@@ -300,5 +300,5 @@ var CardService_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "protos/cards.proto",
+	Metadata: "cards.proto",
 }

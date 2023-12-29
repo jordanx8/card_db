@@ -33,6 +33,7 @@ const typeDefs = gql`
     cardNumber: String
     notes: [String]
     imageLink: String
+    team: String
   }
 
   type Query {
@@ -43,7 +44,7 @@ const typeDefs = gql`
   type Mutation {
     AddPlayer(firstName: String, lastName: String, seasonsPlayed: String): String
     AddSeason(firstName: String, lastName: String, season: String): String
-    AddCard(playerName: String, season: String, manufacturer: String, set: String, insert: String, parallel: String, cardNumber: String, notes: [String], imageLink: String, tableName: String): String
+    AddCard(playerName: String, season: String, manufacturer: String, set: String, insert: String, parallel: String, cardNumber: String, notes: [String], imageLink: String, tableName: String, team: String): String
   }
 `;
 
@@ -114,7 +115,8 @@ const resolvers = {
           cardNumber: args.cardNumber, 
           notes: args.notes,
           imageLink: args.imageLink,
-          tableName: args.tableName}, function (err, response) {
+          tableName: args.tableName,
+          team: args.team}, function (err, response) {
           if (err) {
             resolve(err.details)
           } else {

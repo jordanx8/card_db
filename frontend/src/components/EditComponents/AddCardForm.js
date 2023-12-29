@@ -38,7 +38,6 @@ function AddCardForm() {
         const value = event.target.value
         const name = event.target.id
         if (name === "formNotes") {
-            console.log(event.target.checked)
             if (event.target.checked) {
                 let newArray = [...formState.notes, event.target.getAttribute('controlid')]
                 setFormState({
@@ -64,7 +63,6 @@ function AddCardForm() {
                 [name]: value
             });
         }
-        console.log(formState)
     }
     const [selectedPlayer, setSelectedPlayer] = useState("");
     const [wChecked, setWChecked] = useState(false);
@@ -95,7 +93,8 @@ function AddCardForm() {
                 cardNumber: formState.cardNumber,
                 imageLink: formState.imageLink,
                 tableName: formState.tableName,
-                notes: formState.notes
+                notes: formState.notes,
+                team: formState.team
             }
         })
         toast.update(id, { render: data.AddCard, type: "success", isLoading: false, autoClose: 5000, closeOnClick: true, draggable: true })
@@ -122,6 +121,10 @@ function AddCardForm() {
                         ))
                         }
                     </Form.Select>
+                </Form.Group>
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="team">
+                    <Form.Label>Team</Form.Label>
+                    <Form.Control placeholder="pels?" />
                 </Form.Group>
                 <Form.Group onChange={handleInputChange} className="mb-3" controlId="season">
                     <Form.Label>Select a Season</Form.Label>
