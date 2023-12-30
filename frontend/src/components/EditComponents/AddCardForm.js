@@ -51,13 +51,13 @@ function AddCardForm() {
                     "notes": newArray,
                 });
             }
+        } else if (name === "playerName") {
+            setFormState({
+                ...formState,
+                [name]: value,
+                "season": playersData.players.filter(filterPlayerListDownTo(value))[0].seasons[0]
+            });
         } else {
-            if (name === "playerName") {
-                setFormState({
-                    ...formState,
-                    "season": playersData.players.filter(filterPlayerListDownTo(value))[0].seasons[0]
-                });
-            }
             setFormState({
                 ...formState,
                 [name]: value

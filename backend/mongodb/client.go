@@ -14,7 +14,7 @@ var mongoOnce sync.Once
 
 const (
 	CONNECTIONSTRING = "mongodb://localhost:27017"
-	DB               = "card_db"
+	DB               = "real_card_db"
 )
 
 func GetMongoClient() (*mongo.Client, error) {
@@ -35,4 +35,8 @@ func GetMongoClient() (*mongo.Client, error) {
 		clientInstance = client
 	})
 	return clientInstance, clientInstanceError
+}
+
+func GetDatabase(client *mongo.Client) *mongo.Database {
+	return client.Database(DB)
 }

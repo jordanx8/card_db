@@ -35,7 +35,7 @@ function CardTable({ tableName }) {
 
   return (
     <>
-      <h1>{tableName}</h1>
+      <h1>{tableName} (Total: {cardData.length})</h1>
       <InputGroup className="mb-3">
         {/* TODO: Filter Buttons to work */}
         <SearchBar state={searchTerm} setState={setSearchTerm} allCards={cardsData.cards} cardState={cardData} setCardState={setCardData}/>

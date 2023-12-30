@@ -24,7 +24,7 @@ func (s *CardServiceServer) GetPlayers(empty *pb.Empty, stream pb.CardService_Ge
 	if err != nil {
 		fmt.Println(err)
 	}
-	collection := client.Database("card_db").Collection("players")
+	collection := m.GetDatabase(client).Collection("players")
 
 	opts := options.Find().SetSort(bson.D{{Key: "lastName", Value: 1}})
 

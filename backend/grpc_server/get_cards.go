@@ -29,7 +29,7 @@ func (s *CardServiceServer) GetCards(query *pb.Query, stream pb.CardService_GetC
 	if err != nil {
 		fmt.Println(err)
 	}
-	collection := client.Database("card_db").Collection(query.GetTableName())
+	collection := m.GetDatabase(client).Collection(query.GetTableName())
 
 	cur, err := collection.Find(context.TODO(), bson.D{{}})
 	if err != nil {

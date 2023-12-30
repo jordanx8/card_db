@@ -11,7 +11,7 @@ function PlayerRow({ firstName, lastName, seasons, seasonsPlayed, cardData }) {
         return (
             <>
                 <tr>
-                    <td><img src={getImage(firstName, lastName)} alt={fullName}></img></td>
+                    <td><img width={120} height={180} src={getImage(firstName, lastName)} alt={fullName}></img></td>
                     <td>{firstName}</td>
                     <td>{lastName}</td>
                     <td>{seasonsPlayed}</td>

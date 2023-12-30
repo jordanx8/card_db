@@ -6,6 +6,9 @@ export function getImage(firstName, lastName) {
             num = "02"
         }
     }
+    if (firstName.includes(".")) {
+        firstName = firstName.replace(".", "")
+    }
     return "https://www.basketball-reference.com/req/202106291/images/players/" + lastName.toLowerCase().slice(0, 5) + firstName.toLowerCase().slice(0, 2) + num + ".jpg"
 }
 
@@ -23,6 +26,6 @@ export function seasonToFilter(season) {
 
 export function filterPlayerListDownTo(name) {
     return function filterPlayersByName(player) {
-        return ((player.firstName +" "+player.lastName) === name)
+        return ((player.firstName + " " + player.lastName) === name)
     }
 }

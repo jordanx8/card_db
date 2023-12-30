@@ -26,11 +26,12 @@ func (s *CardServiceServer) AddSeason(c context.Context, r *card_db.SeasonReques
 		{Key: "lastName", Value: r.GetLastName()},
 	}
 
+	//TODO: doesn't work with seasons like "2004-05 (New Orleans Hornets, Golden State Warriors)""
 	seasonsToBeAdded := strings.Split(r.GetSeason(), ",")
 
 	addToArray := bson.D{{Key: "$addToSet", Value: bson.D{{Key: "seasons", Value: bson.M{"$each": seasonsToBeAdded}}}}}
 
-	collection := client.Database("card_db").Collection("players")
+	collection := m.GetDatabase(client).Collection("players")
 
 	_, err = collection.UpdateOne(
 		context.TODO(),

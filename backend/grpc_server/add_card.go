@@ -32,7 +32,7 @@ func (s *CardServiceServer) AddCard(c context.Context, p *card_db.CardRequest) (
 		{Key: "team", Value: p.GetTeam()},
 	}
 
-	collection := client.Database("card_db").Collection(p.GetTableName())
+	collection := m.GetDatabase(client).Collection(p.GetTableName())
 
 	//check if card exists already
 	count, err := collection.CountDocuments(
