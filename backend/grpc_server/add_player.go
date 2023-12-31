@@ -26,7 +26,7 @@ func (s *CardServiceServer) AddPlayer(c context.Context, p *card_db.PlayerReques
 		{Key: "seasons", Value: []string{}},
 	}
 
-	collection := m.GetDatabase(client).Collection("players")
+	collection := m.GetDatabase(client).Collection("Players")
 
 	//check if player exists already
 	count, err := collection.CountDocuments(

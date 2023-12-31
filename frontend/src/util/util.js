@@ -20,7 +20,7 @@ export function nameToFilter(name) {
 
 export function seasonToFilter(season) {
     return function filterCardsBySeason(card) {
-        return season.includes(card.season);
+        return season.includes(card.season.slice(0, 7));
     }
 }
 

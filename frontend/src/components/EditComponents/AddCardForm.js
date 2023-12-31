@@ -86,7 +86,7 @@ function AddCardForm() {
         const { data } = await addCard({
             variables: {
                 playerName: formState.playerName,
-                season: formState.season,
+                season: formState.season.slice(0,7),
                 manufacturer: formState.manufacturer,
                 set: formState.set,
                 parallel: formState.parallel,

@@ -9,8 +9,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-// TODO: player scraper from basketball reference. grab all https://www.basketball-reference.com/teams/NOH/players.html Pels
-
 func main() {
 
 	log.Println("starting up")

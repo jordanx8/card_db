@@ -12,10 +12,10 @@ import (
 )
 
 type Player struct {
-	firstName     string
-	lastName      string
-	seasonsPlayed string
-	seasons       []string
+	FirstName     string
+	LastName      string
+	SeasonsPlayed string
+	Seasons       []string
 }
 
 func (s *CardServiceServer) GetPlayers(empty *pb.Empty, stream pb.CardService_GetPlayersServer) error {
@@ -24,7 +24,7 @@ func (s *CardServiceServer) GetPlayers(empty *pb.Empty, stream pb.CardService_Ge
 	if err != nil {
 		fmt.Println(err)
 	}
-	collection := m.GetDatabase(client).Collection("players")
+	collection := m.GetDatabase(client).Collection("Players")
 
 	opts := options.Find().SetSort(bson.D{{Key: "lastName", Value: 1}})
 
