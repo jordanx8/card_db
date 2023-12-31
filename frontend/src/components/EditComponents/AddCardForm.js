@@ -15,11 +15,14 @@ function AddCardForm() {
         season: "",
         manufacturer: "",
         set: "",
+        insert: "",
         parallel: "",
         cardNumber: "",
         imageLink: "",
         tableName: "Pelicans",
-        notes: []
+        notes: [],
+        wOthers: "",
+        serialNumber: ""
     });
 
     const { data: playersData, loading: playersLoading, error: playersError } = useQuery(GET_PLAYERS_QUERY, {
@@ -37,6 +40,7 @@ function AddCardForm() {
     function handleInputChange(event) {
         const value = event.target.value
         const name = event.target.id
+
         if (name === "formNotes") {
             if (event.target.checked) {
                 let newArray = [...formState.notes, event.target.getAttribute('controlid')]
@@ -83,17 +87,25 @@ function AddCardForm() {
 
     async function handleSubmit() {
         const id = toast.loading("Adding card...")
+        let newArray = [...formState.notes]
+        if (formState.serialNumber != "" && numChecked) {
+            newArray.push("#'d (" + formState.serialNumber + ")")
+        }
+        if (formState.wOthers != "" && wChecked) {
+            newArray.push("w/ Others (" + formState.wOthers + ")")
+        }
         const { data } = await addCard({
             variables: {
                 playerName: formState.playerName,
-                season: formState.season.slice(0,7),
+                season: formState.season.slice(0, 7),
                 manufacturer: formState.manufacturer,
                 set: formState.set,
                 parallel: formState.parallel,
+                insert: formState.insert,
                 cardNumber: formState.cardNumber,
                 imageLink: formState.imageLink,
                 tableName: formState.tableName,
-                notes: formState.notes,
+                notes: newArray,
                 team: formState.team
             }
         })
@@ -130,7 +142,7 @@ function AddCardForm() {
                     <Form.Label>Select a Season</Form.Label>
                     <Form.Select>
                         {playersData.players.filter(filterPlayerListDownTo(selectedPlayer))[0].seasons.map(season => (
-                            <ListDropdown text={season} />
+                            <ListDropdown key={season} text={season} />
                         ))
                         }
                     </Form.Select>
@@ -142,6 +154,10 @@ function AddCardForm() {
                 <Form.Group onChange={handleInputChange} className="mb-3" controlId="set">
                     <Form.Label>Set</Form.Label>
                     <Form.Control placeholder="Enter card's set" />
+                </Form.Group>
+                <Form.Group onChange={handleInputChange} className="mb-3" controlId="insert">
+                    <Form.Label>Insert</Form.Label>
+                    <Form.Control placeholder="Enter insert" />
                 </Form.Group>
                 <Form.Group onChange={handleInputChange} className="mb-3" controlId="parallel">
                     <Form.Label>Parallel</Form.Label>
@@ -162,13 +178,16 @@ function AddCardForm() {
                     <Form.Check inline type="checkbox" label="Pre-RC" controlId="Pre-RC" />
                     <Form.Check inline type="checkbox" label="Auto" controlId="Auto" />
                     <Form.Check inline type="checkbox" label="Patch" controlId="Patch" />
-                    {/* TODO: Get the below forms thangs to work */}
-                    <Form.Check value={wChecked} onChange={wHandler} type="checkbox" label="w/ Others" controlId="w/ Others" />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Check value={wChecked} onChange={wHandler} type="checkbox" label="w/ Others" />
                     {wChecked &&
-                        <Form.Control placeholder="who? (comma-separated)" />}
+                        <Form.Control onChange={handleInputChange} placeholder="who? (comma-separated)" id="wOthers" />}
+                </Form.Group>
+                <Form.Group className="mb-3">
                     <Form.Check value={numChecked} onChange={numberHandler} type="checkbox" label="#'d" />
                     {numChecked &&
-                        <Form.Control placeholder="Enter serial number" />}
+                        <Form.Control onChange={handleInputChange} placeholder="Enter serial number" id="serialNumber" />}
                 </Form.Group>
                 <Button variant="primary" type="button" onClick={handleSubmit}>
                     Submit

@@ -9,6 +9,10 @@ export function getImage(firstName, lastName) {
     if (firstName.includes(".")) {
         firstName = firstName.replace(".", "")
     }
+    if(firstName == "Ömer"){
+        firstName = "Omer"
+        lastName = "Asik"
+    }
     return "https://www.basketball-reference.com/req/202106291/images/players/" + lastName.toLowerCase().slice(0, 5) + firstName.toLowerCase().slice(0, 2) + num + ".jpg"
 }
 
